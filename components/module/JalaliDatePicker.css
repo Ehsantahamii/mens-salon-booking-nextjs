@@ -1,0 +1,16 @@
+.reserve-calendar {
+  width: 720px !important;
+  margin-top: 3rem;
+}
+.reserve-calendar .rmdp-calendar {
+  width: 100%;
+}
+.rmdp-day-picker div {
+  width: 100%;
+}
+.rmdp-day.rmdp-selected span:not(.highlight) {
+  background-color: #ffd39a !important;
+}
+.rmdp-day.rmdp-today span {
+  background-color: #ffd39a75 !important;
+}

@@ -1,0 +1,9 @@
+#drop-down {
+  display: none;
+  transition: display 0.3s ease-out;
+}
+.service-nav:hover #drop-down {
+  display: block;
+  transition: display 0.3s ease-out;
+
+}
