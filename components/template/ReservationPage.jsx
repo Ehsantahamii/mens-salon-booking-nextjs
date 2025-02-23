@@ -13,7 +13,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
 import { useFormState } from "react-dom";
-import { getReserveTimes, sendReserveData } from "@/actions/ReserveActions";
+import { getReserveTimes, sendReserveData, sendReserveTime } from "@/actions/ReserveActions";
 import SubmitBtn from "../module/SubmitBtn";
 
 
@@ -23,13 +23,13 @@ const ReservationPage = (salonData) => {
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
     const [empty, isEmpty] = useState(true);
+
     const [isLoading, setIsLoading] = useState(false);
-    // const [form, setForm] = useState({
-    //     service_id: "null",
-    //     provider_id: "null",
-    // });
+
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
+    const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
+    console.log(stateSendTime)
 
     useEffect(() => {
         if (stateReserveData.status === "success") {
@@ -51,8 +51,19 @@ const ReservationPage = (salonData) => {
 
 
     });
+    useEffect(() => {
+        if (stateSendTime.status === "success") {
+            setIsLoading(false);
+            toast.success(stateSendTime.message);
 
-    const router = useRouter();
+
+
+        } else if (stateSendTime.status === "error") {
+            toast.error(stateSendTime.message);
+        }
+
+
+    });
 
 
     // const handleServiceIdChange = (event) => {
@@ -260,11 +271,15 @@ const ReservationPage = (salonData) => {
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
                     time.length > 0 && time.map((data) => (
-                        <button type="button" disabled={data.reserved == true ? true : false} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
-                            onClick={() => handleReserveTimeUpload(data)}
-                        >
-                            {data.time}
-                        </button>
+                        <form action={formActionSendTime}>
+                            <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
+                            <button type="submit" disabled={data.reserved == true ? true : false} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
+                                // onClick={() => handleReserveTimeUpload(data)}
+                                onClick={() => { setIsLoading(true); setSelectedTime(data.id) }}
+                            >
+                                {data.time}
+                            </button>
+                        </form>
                     ))
                 }
             </div>

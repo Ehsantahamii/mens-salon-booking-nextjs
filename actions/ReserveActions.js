@@ -1,5 +1,6 @@
 "use server";
 import { postFetch } from "@/utils/requests";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function sendReserveData(stateCellphone, formData) {
@@ -83,6 +84,44 @@ export async function getReserveTimes(stateCellphone, formData) {
     return {
       status: data.status,
       message: "خطای شبکه!",
+    };
+  }
+}
+export async function sendReserveTime(stateCellphone, formData) {
+  const id = formData.get("time_id");
+
+  if (id === "") {
+    return {
+      status: "error",
+      message: "لطفا یکی از محدوده های زمانی را جهت رزرو انتخاب کنید.",
+    };
+  }
+  const accessToken = cookies().get("access_token");
+  if (!accessToken) {
+    return {
+      status: "error",
+      message: "ایتدا وارد شوید.",
+    };
+  }
+
+  const data = await postFetch(
+    "/api/v1/reservation/book",
+    { id },
+    {
+      Authorization: `Bearer ${accessToken.value}`,
+    }
+  );
+  if (data.status === "success") {
+    revalidatePath("/reservation")
+    return {
+      status: data.status,
+      data: data.data,
+      message: "نوبت شما با موفقیت ثبت شد.",
+    };
+  } else {
+    return {
+      status: data.status,
+      message: data.message,
     };
   }
 }
