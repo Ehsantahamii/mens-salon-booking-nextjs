@@ -4,7 +4,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useFormState, useFormStatus } from "react-dom";
 import toast from 'react-hot-toast';
-import SubmitBtn from '@/components/module/submitBtn';
+import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -14,7 +14,7 @@ const CheckOtpForm = ({ setStep }) => {
 
     const router = useRouter()
 
- 
+
     useEffect(() => {
         if (stateOtp.status === "success") {
             toast.success(stateOtp.message);
