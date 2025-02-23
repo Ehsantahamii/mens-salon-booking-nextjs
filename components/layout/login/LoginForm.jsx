@@ -1,0 +1,57 @@
+"use client"
+
+import { login } from "@/actions/LoginActions";
+import SubmitBtn from "@/components/module/SubmitBtn";
+import Link from "next/link";
+import { useEffect } from "react";
+import { useFormState, useFormStatus } from "react-dom";
+import { IoIosCall } from "react-icons/io";
+import toast from 'react-hot-toast';
+
+const LoginForm = ({ setStep }) => {
+    const [stateMobile, formActionMobile] = useFormState(login, {});
+    const { pending } = useFormStatus();
+
+
+    useEffect(() => {
+        console.log(stateMobile)
+        if (stateMobile.status === "success") {
+            toast.success(`کد: ${stateMobile.data.otp}`)
+
+            setStep(2)
+
+        } else if (stateMobile.status === "error") {
+            toast.error(stateMobile.message)
+        }
+    });
+
+    return (
+        <section className="w-[100dvw] h-screen flex gap-8 justify-center items-center">
+            <div className="w-[85%] flex flex-col justify-between p-2 max-w-[380px] min-h-[320px] shadow rounded-xl ">
+                <h1 className="text-[24px] font-semibold py-4 text-center">
+                    سامانه رزرو نوبت
+                </h1>
+
+                <form className="w-[85%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionMobile}>
+                    <div className="flex flex-col w-full relative">
+                        <IoIosCall className="absolute left-4 bottom-3 opacity-50" color="#0e0e0e" size={18} />
+
+                        <label htmlFor="mobile" className="text-[18px] font-normal pb-2">
+                            تلفن همراه خود را وارد نمایید.
+                        </label>
+                        <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px]  py-2 px-4 rounded-xl" type="text" name="mobile" id="mobile" placeholder="09100000000" />
+                    </div>
+                    <SubmitBtn title="ارسال کد تایید" style="text-white px-6 py-2 rounded-md" />
+                </form>
+                <p className="text-[10px] py-1 text-center">
+                    طراحی شده توسط
+                    <Link className="px-1" href="https://developmart.ir/">
+                        Developmart.ir
+                    </Link>
+                </p>
+            </div>
+        </section>
+    );
+};
+
+export default LoginForm;

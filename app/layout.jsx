@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <Toaster
           position="top-center"
           reverseOrder={false}
-          gutter={8}
+          gutter={3}
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
             },
           }}
         />
-        <Header />
+        {/* <Header /> */}
         {children}
       </body>
     </html>

@@ -21,7 +21,7 @@ const getFetch = async (url, headers = {}) => {
 };
 
 const postFetch = async (url, body, headers = {}) => {
-  const res = await fetch(`https://api.developmart.ir${url}`, {
+  const res = await fetch(`https://admin.developmart.ir${url}`, {
     cache: "no-store",
     method: "POST",
     headers: {
