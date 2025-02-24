@@ -1,5 +1,6 @@
 // import api from "@/configs/api";
 "use server";
+import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
 const getFetch = async (url, headers = {}) => {
@@ -31,7 +32,7 @@ const postFetch = async (url, body, headers = {}) => {
     },
     body: JSON.stringify(body),
   });
-
+  revalidatePath("/reservation");
   return await res.json();
 };
 const putFetch = async (url, body) => {

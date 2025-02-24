@@ -1,6 +1,6 @@
 "use server";
 import { postFetch } from "@/utils/requests";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 
 export async function sendReserveData(stateCellphone, formData) {
@@ -112,7 +112,7 @@ export async function sendReserveTime(stateCellphone, formData) {
     }
   );
   if (data.status === "success") {
-    revalidatePath("/reservation")
+    revalidateTag("book");
     return {
       status: data.status,
       data: data.data,

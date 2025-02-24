@@ -102,7 +102,7 @@ export async function checkOtp(stateOtp, formData) {
 }
 
 export async function logout() {
-  const accessToken = cookies().get("login_token");
+  const accessToken = cookies().get("access_token");
 
   if (!accessToken) {
     return {

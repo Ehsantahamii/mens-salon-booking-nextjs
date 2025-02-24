@@ -25,20 +25,20 @@ const ReservationPage = (salonData) => {
     const [empty, isEmpty] = useState(true);
 
     const [isLoading, setIsLoading] = useState(false);
-
+    const router = useRouter()
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
-    console.log(stateSendTime)
-
+    console.log(stateReserveData.status)
     useEffect(() => {
         if (stateReserveData.status === "success") {
             setDay(stateReserveData.data.days)
+        } else if (stateReserveData.status === "error") {
+            toast.error(stateReserveData.message)
+
+
         }
 
-        if (stateReserveData.status === "error") {
-            toast.error(stateReserveData.message)
-        }
     });
     useEffect(() => {
         if (stateGetTimes.status === "success") {
@@ -55,6 +55,7 @@ const ReservationPage = (salonData) => {
         if (stateSendTime.status === "success") {
             setIsLoading(false);
             toast.success(stateSendTime.message);
+            router.push("/reservation")
 
 
 
