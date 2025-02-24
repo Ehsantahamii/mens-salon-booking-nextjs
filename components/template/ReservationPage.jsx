@@ -49,14 +49,35 @@ const ReservationPage = (salonData) => {
 
 
     });
+    const handleSubmit = async (formData) => {
+        return new Promise((resolve, reject) => {
+            formActionSendTime(formData);
+
+            // Ensure state updates before resolving
+            setTimeout(() => {
+                if (stateSendTime.status === "success") {
+                    resolve(stateSendTime);
+                } else {
+                    reject(new Error(stateSendTime.message));
+                }
+            }, 4000);
+        });
+
+    };
+    // Handle form submission with toast.promise
+    const onSubmit = (formData) => {
+        toast.promise(handleSubmit(formData), {
+            loading: "Submitting...",
+            success: (res) => res.message || "Success!",
+            error: (err) => err.message || "Error submitting form",
+        });
+    };
+
+
     useEffect(() => {
         if (stateSendTime.status === "success") {
             setIsLoading(false);
-            toast.success(stateSendTime.message);
             router.push("/reservation")
-
-
-
         } else if (stateSendTime.status === "error") {
             toast.error(stateSendTime.message);
         }
@@ -268,7 +289,7 @@ const ReservationPage = (salonData) => {
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
                     time.length > 0 && time.map((data) => (
-                        <form action={formActionSendTime}>
+                        <form action={onSubmit}>
                             <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
                             <button type="submit" disabled={data.reserved == true ? true : false} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
                                 // onClick={() => handleReserveTimeUpload(data)}
