@@ -57,7 +57,7 @@ const CheckOtpForm = ({ setStep }) => {
                                 key={index}
                                 type="text"
                                 maxLength="1"
-                                className="w-12 h-12 text-center text-xl border rounded-md"
+                                className="w-[2.3rem] h-[2.3rem] sm:w-12 sm:h-12 text-center text-xl border rounded-md"
                                 value={digit}
                                 onChange={(e) => handleChange(index, e.target.value)}
                                 ref={(el) => (inputRefs.current[index] = el)}

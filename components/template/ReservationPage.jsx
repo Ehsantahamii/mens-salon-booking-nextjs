@@ -31,10 +31,6 @@ const ReservationPage = (salonData) => {
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
     console.log(stateReserveData.status)
     useEffect(() => {
-        if (stateReserveData.loginStatus == false) {
-            toast.error("حساب کاربری شما منقضی شده است لطفا دوباره وارد شوید.")
-            router.push("/login")
-        }
         if (stateReserveData.status === "success") {
             setDay(stateReserveData.data.days)
         } else if (stateReserveData.status === "error") {
@@ -43,11 +39,6 @@ const ReservationPage = (salonData) => {
 
     });
     useEffect(() => {
-        if (stateSendTime.loginStatus == false) {
-            toast.error("حساب کاربری شما منقضی شده است لطفا دوباره وارد شوید.")
-            router.push("/login")
-        }
-
         if (stateGetTimes.status === "success") {
             setTime(stateGetTimes.data.times);
             setIsLoading(false);
@@ -59,11 +50,6 @@ const ReservationPage = (salonData) => {
 
     });
     useEffect(() => {
-        if (stateGetTimes.loginStatus == false) {
-            toast.error("حساب کاربری شما منقضی شده است لطفا دوباره وارد شوید.")
-            router.push("/login")
-        }
-
         if (stateSendTime.status === "success") {
             setIsLoading(false);
             toast.success(stateSendTime.message);
@@ -74,8 +60,6 @@ const ReservationPage = (salonData) => {
         } else if (stateSendTime.status === "error") {
             toast.error(stateSendTime.message);
         }
-
-
     });
 
 

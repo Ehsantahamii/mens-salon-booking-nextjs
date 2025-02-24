@@ -20,27 +20,19 @@ export async function sendReserveData(stateCellphone, formData) {
     };
   }
   const accessToken = cookies().get("access_token");
-  if (!accessToken) {
-    return {
-      status: "error",
-      loginStatus: false,
-      message: "ایتدا وارد شوید.",
-    };
-  }
+  // if (!accessToken) {
+  //   return {
+  //     status: "error",
+  //     loginStatus: false,
+  //     message: "ابتدا وارد شوید.",
+  //   };
+  // }
 
   const data = await postFetch("/api/v1/reservation/days", {
     service_id,
     provider_id,
-    token: accessToken.value,
   });
   if (data.status === "success") {
-    // cookies().set({
-    //   name: "login_token",
-    //   value: data.data.token,
-    //   httpOnly: true,
-    //   maxAge: 60 * 60 * 24,
-    //   path: "/",
-    // });
 
     return {
       status: data.status,
@@ -64,17 +56,16 @@ export async function getReserveTimes(stateCellphone, formData) {
     };
   }
   const accessToken = cookies().get("access_token");
-  if (!accessToken) {
-    return {
-      status: "error",
-      loginStatus: false,
-      message: "ایتدا وارد شوید.",
-    };
-  }
+  // if (!accessToken) {
+  //   return {
+  //     status: "error",
+  //     loginStatus: false,
+  //     message: "ایتدا وارد شوید.",
+  //   };
+  // }
 
   const data = await postFetch("/api/v1/reservation/times", {
     day_id,
-    token: accessToken.value,
   });
   if (data.status === "success") {
     return {
@@ -99,13 +90,13 @@ export async function sendReserveTime(stateCellphone, formData) {
     };
   }
   const accessToken = cookies().get("access_token");
-  if (!accessToken) {
-    return {
-      status: "error",
-      loginStatus: false,
-      message: "ایتدا وارد شوید.",
-    };
-  }
+  // if (!accessToken) {
+  //   return {
+  //     status: "error",
+  //     loginStatus: false,
+  //     message: "ابتدا وارد شوید.",
+  //   };
+  // }
 
   const data = await postFetch(
     "/api/v1/reservation/book",
