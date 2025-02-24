@@ -23,6 +23,7 @@ export async function sendReserveData(stateCellphone, formData) {
   if (!accessToken) {
     return {
       status: "error",
+      loginStatus: false,
       message: "ایتدا وارد شوید.",
     };
   }
@@ -66,6 +67,7 @@ export async function getReserveTimes(stateCellphone, formData) {
   if (!accessToken) {
     return {
       status: "error",
+      loginStatus: false,
       message: "ایتدا وارد شوید.",
     };
   }
@@ -100,6 +102,7 @@ export async function sendReserveTime(stateCellphone, formData) {
   if (!accessToken) {
     return {
       status: "error",
+      loginStatus: false,
       message: "ایتدا وارد شوید.",
     };
   }
