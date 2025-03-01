@@ -23,17 +23,17 @@ export default function RootLayout({ children }) {
   return (
     <html lang="fa" dir="rtl">
       <body
-        className={`${yekanBakh.variable} ${geistMono.variable} antialiased`}
+        className={`${yekanBakh.variable} ${geistMono.variable} antialiased `}
       >
         <Toaster
           position="top-center"
           reverseOrder={false}
-          gutter={3}
+          gutter={1}
           containerClassName=""
           containerStyle={{}}
           toastOptions={{
             // Define default options
-            className: '',
+            className: 'font-semibold',
             duration: 5000,
             removeDelay: 1000,
             style: {

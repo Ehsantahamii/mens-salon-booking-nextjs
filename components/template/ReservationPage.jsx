@@ -66,7 +66,7 @@ const ReservationPage = (salonData) => {
                 } else {
                     reject(new Error(stateSendTime.message));
                 }
-            }, 6000);
+            }, 5000);
         });
 
     };
@@ -75,7 +75,7 @@ const ReservationPage = (salonData) => {
         toast.promise(handleSubmit(formData), {
             loading: "در حال ثبت نوبت ...",
             success: (res) => res.message || "Success!",
-            error: (err) => err.message || "Error submitting form",
+            error: (err) => err.message,
         });
     };
 
