@@ -2,7 +2,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toast from 'react-hot-toast';
+import { toast } from "react-toastify";
 import { PiArrowCircleLeftFill, PiArrowCircleRightFill } from "react-icons/pi";
 
 import { Swiper, SwiperSlide } from 'swiper/react';

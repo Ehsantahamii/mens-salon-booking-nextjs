@@ -1,11 +1,11 @@
 "use client"
 import { checkOtp } from '@/actions/LoginActions';
 import { useEffect, useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
 import { useFormState, useFormStatus } from "react-dom";
-import toast from 'react-hot-toast';
+import { toast } from "react-toastify";
 import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
+import { useRouter } from 'next/navigation';
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const inputRefs = useRef([]);
@@ -15,15 +15,17 @@ const CheckOtpForm = ({ setStep }) => {
     const router = useRouter()
 
     useEffect(() => {
-        if (stateOtp.status === "success") {
+        if (stateOtp.status === "success" && stateOtp.user == 1) {
             toast.success(stateOtp.message);
             router.push("/reservation");
 
-        }
-        if (stateOtp.status === "error") {
+        } else if (stateOtp.user == 0) {
+            setStep(3)
+        } else if (stateOtp.status === "error") {
             toast.error(stateOtp.message);
 
         }
+
     });
 
 

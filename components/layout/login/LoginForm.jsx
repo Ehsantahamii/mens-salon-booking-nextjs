@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { IoIosCall } from "react-icons/io";
-import toast from 'react-hot-toast';
+import { MdPerson } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const LoginForm = ({ setStep }) => {
     const [stateMobile, formActionMobile] = useFormState(login, {});
@@ -43,8 +44,7 @@ const LoginForm = ({ setStep }) => {
                 <form className="w-[85%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionMobile}>
                     <div className="flex flex-col w-full relative">
                         <IoIosCall className="absolute left-4 bottom-3 opacity-50" color="#0e0e0e" size={18} />
-
-                        <label htmlFor="mobile" className="text-[18px] font-normal pb-2">
+                        <label htmlFor="mobile" className="text-[18px] font-normal py-2">
                             تلفن همراه خود را وارد نمایید.
                         </label>
                         <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"

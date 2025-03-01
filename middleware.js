@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify";
+
 
 // to check user is login
 export function middleware(req) {

@@ -61,7 +61,7 @@ export async function checkOtp(stateOtp, formData) {
   if (!pattern.test(otp)) {
     return {
       status: "error",
-      message: " کد نامعتبر است.",
+      message: "فورمت کد ارسالی نا معتبر است.",
     };
   }
 
@@ -91,12 +91,50 @@ export async function checkOtp(stateOtp, formData) {
     return {
       status: data.status,
       message: data.message,
-      user: data.user,
+      user: data.data.name,
     };
   } else {
     return {
       status: data.status,
       message: "کد ورود نادرست است.",
+    };
+  }
+}
+export async function sendUserName(stateName, formData) {
+  const name = formData.get("name");
+
+  if (name === "") {
+    return {
+      status: "error",
+      message: "لطفا یک  نام معتبر وارد نمایید.",
+    };
+  }
+  const accessToken = cookies().get("access_token");
+  if (!accessToken) {
+    return {
+      status: "error",
+      message: "خطایی رخ داده است، دوباره تلاش کنید.",
+    };
+  }
+
+  const data = await postFetch(
+    "/api/v1/name",
+    { name },
+    {
+      Authorization: `Bearer ${accessToken.value}`,
+    }
+  );
+
+  if (data.status === "success") {
+    return {
+      status: data.status,
+      data: data.data,
+      message: data.message,
+    };
+  } else {
+    return {
+      status: data.status,
+      message: data.message,
     };
   }
 }

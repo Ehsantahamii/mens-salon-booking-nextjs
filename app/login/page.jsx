@@ -2,9 +2,11 @@
 import { getReserveTimes, sendReserveData, sendReserveTime } from "@/actions/ReserveActions";
 import CheckOtpForm from "@/components/layout/login/CheckOtpForm";
 import LoginForm from "@/components/layout/login/LoginForm";
+import NameForm from "@/components/layout/login/NameForm";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
+import { toast } from "react-toastify";
 
 const page = () => {
     const [step, setStep] = useState(1);
@@ -27,6 +29,7 @@ const page = () => {
         <div>
             {step === 1 && <LoginForm setStep={setStep} />}
             {step === 2 && <CheckOtpForm setStep={setStep} />}
+            {step === 3 && <NameForm setStep={setStep} />}
 
         </div>
     );
