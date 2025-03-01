@@ -18,6 +18,8 @@ import SubmitBtn from "../module/SubmitBtn";
 
 
 const ReservationPage = (salonData) => {
+    const [serviceId, setServiceId] = useState();
+    const [providerId, setProviderId] = useState();
     const [day, setDay] = useState([]);
     const [selectedDate, setSelectedDate] = useState();
     const [time, setTime] = useState([]);
@@ -29,12 +31,16 @@ const ReservationPage = (salonData) => {
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
-    console.log(stateReserveData.status)
     useEffect(() => {
+        console.log(stateReserveData)
+
         if (stateReserveData.status === "success") {
             setDay(stateReserveData.data.days)
         } else if (stateReserveData.status === "error") {
-            toast.error(stateReserveData.message)
+            toast.error("خطای شبکه")
+        } else if (stateReserveData.status === "unavailable") {
+            toast.error(stateReserveData.message);
+
         }
 
     });
@@ -60,14 +66,14 @@ const ReservationPage = (salonData) => {
                 } else {
                     reject(new Error(stateSendTime.message));
                 }
-            }, 4000);
+            }, 6000);
         });
 
     };
     // Handle form submission with toast.promise
     const onSubmit = (formData) => {
         toast.promise(handleSubmit(formData), {
-            loading: "Submitting...",
+            loading: "در حال ثبت نوبت ...",
             success: (res) => res.message || "Success!",
             error: (err) => err.message || "Error submitting form",
         });
@@ -75,9 +81,10 @@ const ReservationPage = (salonData) => {
 
 
     useEffect(() => {
+        console.log(stateSendTime)
         if (stateSendTime.status === "success") {
             setIsLoading(false);
-            router.push("/reservation")
+            router.push("/reservation");
         } else if (stateSendTime.status === "error") {
             toast.error(stateSendTime.message);
         }
@@ -179,7 +186,9 @@ const ReservationPage = (salonData) => {
 
                         </label>
 
-                        <select name="service_id" id="service_id" className="border-b-textColor transition-all focus:transition-all p-2 border-b-[1px]">
+                        <select name="service_id" id="service_id" className="border-b-textColor transition-all focus:transition-all p-2 border-b-[1px]"
+                            onChange={(e) => setServiceId(e.target.value)}
+                        >
                             <option value="">انتخاب کنید ...</option>
                             {
                                 salonData.salonData.services && salonData.salonData.services.map((item) => {
@@ -192,7 +201,9 @@ const ReservationPage = (salonData) => {
                         <label htmlFor="provider_id">
                             اجرا کننده خدمات را انتخاب کنید*
                         </label>
-                        <select name="provider_id" id="provider_id" className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]">
+                        <select name="provider_id" id="provider_id" className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
+                            onChange={(e) => setProviderId(e.target.value)}
+                        >
                             <option value="">انتخاب کنید ...</option>
                             {
                                 salonData.salonData.providers && salonData.salonData.providers.map((item) => {
@@ -256,11 +267,13 @@ const ReservationPage = (salonData) => {
                                 day && day.map((item => (
 
                                     <SwiperSlide className={`w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded cursor-pointer`} title={item.date} key={item.id}
-                                        onClick={() => { setSelectedDate(item.id) }}
+                                        onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}
                                     >
                                         <form action={formActionGetTimes} >
                                             <button type="submit" className="w-full h-full" onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}>
                                                 <input type="hidden" name="day_id" value={selectedDate} />
+                                                <input type="hidden" name="provider_id" value={providerId} />
+                                                <input type="hidden" name="service_id" value={serviceId} />
                                                 <h3 className="font-medium">
                                                     {item.label}
                                                 </h3>

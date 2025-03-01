@@ -14,7 +14,6 @@ const CheckOtpForm = ({ setStep }) => {
 
     const router = useRouter()
 
-
     useEffect(() => {
         if (stateOtp.status === "success") {
             toast.success(stateOtp.message);
@@ -41,7 +40,7 @@ const CheckOtpForm = ({ setStep }) => {
     };
 
     return (
-        <section className="w-[100dvw] h-screen flex justify-center items-center">
+        <section className="w-[100dvw] h-[90vh] md:h-svh flex justify-center items-center">
             <div className="w-[90%] max-w-[420px] flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">
                 <FaArrowCircleLeft color='#333' title='بازگشت' size={20} className='cursor-pointer absolute left-4 top-4' onClick={() => setStep(1)} />
                 <h2 className='text-[26px]'>
@@ -67,7 +66,7 @@ const CheckOtpForm = ({ setStep }) => {
                     <input type="hidden" name="otp" id="otp" value={otp.join("")} />
                     <SubmitBtn
                         title="تأیید"
-                        style="bg-yellow-500 text-white px-6 py-2 rounded-md hover:bg-yellow-600"
+                        style="text-white px-6 py-2 rounded-md"
                     />
 
                 </form>

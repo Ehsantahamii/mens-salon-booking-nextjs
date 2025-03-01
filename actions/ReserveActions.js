@@ -33,7 +33,6 @@ export async function sendReserveData(stateCellphone, formData) {
     provider_id,
   });
   if (data.status === "success") {
-
     return {
       status: data.status,
       data: data.data,
@@ -41,14 +40,16 @@ export async function sendReserveData(stateCellphone, formData) {
     };
   } else {
     return {
-      status: "error",
+      status: data.status,
       message: data.message,
     };
   }
 }
 export async function getReserveTimes(stateCellphone, formData) {
   const day_id = formData.get("day_id");
-
+  const service_id = formData.get("service_id");
+  const provider_id = formData.get("provider_id");
+  console.log(day_id, service_id, provider_id);
   if (day_id === "") {
     return {
       status: "error",
@@ -66,6 +67,8 @@ export async function getReserveTimes(stateCellphone, formData) {
 
   const data = await postFetch("/api/v1/reservation/times", {
     day_id,
+    service_id,
+    provider_id,
   });
   if (data.status === "success") {
     return {
@@ -76,7 +79,7 @@ export async function getReserveTimes(stateCellphone, formData) {
   } else {
     return {
       status: data.status,
-      message: "خطای شبکه!",
+      message: data,
     };
   }
 }

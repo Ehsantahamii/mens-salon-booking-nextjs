@@ -3,18 +3,27 @@
 import { login } from "@/actions/LoginActions";
 import SubmitBtn from "@/components/module/SubmitBtn";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useFormState, useFormStatus } from "react-dom";
 import { IoIosCall } from "react-icons/io";
 import toast from 'react-hot-toast';
 
 const LoginForm = ({ setStep }) => {
     const [stateMobile, formActionMobile] = useFormState(login, {});
-    const { pending } = useFormStatus();
+    const [activeBtn, setActiveBtn] = useState(false);
 
+    function isBtnActive(e) {
+        const change = e.target.value
+        if (change.length == 11) {
+            setActiveBtn(true);
+        } else {
+            setActiveBtn(false);
+
+        }
+
+    }
 
     useEffect(() => {
-        console.log(stateMobile)
         if (stateMobile.status === "success") {
             toast.success(`کد: ${stateMobile.data.otp}`)
 
@@ -24,9 +33,8 @@ const LoginForm = ({ setStep }) => {
             toast.error(stateMobile.message)
         }
     });
-
     return (
-        <section className="w-[100dvw] h-screen flex gap-8 justify-center items-center">
+        <section className="w-[100dvw] h-[90vh] md:h-svh flex gap-8 justify-center items-center">
             <div className="w-[85%] flex flex-col justify-between p-2 max-w-[380px] min-h-[320px] shadow rounded-xl ">
                 <h1 className="text-[24px] font-semibold py-4 text-center">
                     سامانه رزرو نوبت
@@ -39,9 +47,11 @@ const LoginForm = ({ setStep }) => {
                         <label htmlFor="mobile" className="text-[18px] font-normal pb-2">
                             تلفن همراه خود را وارد نمایید.
                         </label>
-                        <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px]  py-2 px-4 rounded-xl" type="text" name="mobile" id="mobile" placeholder="09100000000" />
+                        <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
+                            maxLength={11}
+                            type="text" name="mobile" id="mobile" placeholder="09100000000" onChange={isBtnActive} />
                     </div>
-                    <SubmitBtn title="ارسال کد تایید" style="text-white px-6 py-2 rounded-md" />
+                    <SubmitBtn title="ارسال کد تایید" activeBtn={activeBtn} style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`} />
                 </form>
                 <p className="text-[10px] py-1 text-center">
                     طراحی شده توسط
