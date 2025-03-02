@@ -35,6 +35,7 @@ const ReservationPage = (salonData) => {
         toast(stateReserveData?.message, { type: `${stateReserveData.status}` });
 
         if (stateReserveData.status === "success") {
+            setDay(null);
             setDay(stateReserveData.data.days)
         }
 
@@ -50,38 +51,18 @@ const ReservationPage = (salonData) => {
 
 
     });
-    const handleSubmit = async (formData) => {
-        return new Promise((resolve, reject) => {
-            formActionSendTime(formData);
-
-            // Ensure state updates before resolving
-            setTimeout(() => {
-                if (stateSendTime.status === "success") {
-                    resolve(stateSendTime);
-                } else {
-                    reject(new Error(stateSendTime.message));
-                }
-            }, 5000);
-        });
-
-    };
-    // Handle form submission with toast.promise
-    const onSubmit = (formData) => {
-        toast.promise(handleSubmit(formData), {
-            loading: "در حال ثبت نوبت ...",
-            success: (res) => res.message || "Success!",
-            error: (err) => err.message,
-        });
-    };
-
 
     useEffect(() => {
-        console.log(stateSendTime)
+        toast.dismiss();
+        toast(stateSendTime?.message, { type: `${stateSendTime.status}` });
+        // toast.update(saveReserveNotification, { render: stateSendTime?.message, type: stateSendTime.status, isLoading: false });
+
         if (stateSendTime.status === "success") {
+
             setIsLoading(false);
             router.push("/reservation");
         }
-    });
+    }, [stateSendTime]);
 
 
     // const handleServiceIdChange = (event) => {
@@ -164,13 +145,6 @@ const ReservationPage = (salonData) => {
 
     return (
         <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
-            {/* <h1 className="text-textColor">
-                فرم رزرو خدمات
-
-                <span className="text-liteGold">
-                    پائیزان
-                </span>
-            </h1> */}
             <form action={formActionReserveData} className="flex max-w-[640px] flex-col gap-8  mx-auto py-8" encType="multipart/form-data">
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-12">
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
@@ -207,7 +181,7 @@ const ReservationPage = (salonData) => {
                     </div>
                 </div>
 
-                <SubmitBtn title="جستوجو" style="max-w-[150px] mx-auto px-4 py-2 bg-liteGold rounded-lg" />
+                <SubmitBtn title="جستوجو" style="max-w-[150px] mx-auto px-4 py-2 bg-liteGold rounded-lg" fun={setDay} />
                 {
                     isLoading &&
                     <div class="text-center">
@@ -225,7 +199,7 @@ const ReservationPage = (salonData) => {
                 }
                 {
 
-                    day.length > 0 && <div className="swiper-container flex gap-6 justify-between items-center">
+                    day?.length > 0 && <div className="swiper-container flex gap-6 justify-between items-center">
                         <div className="icon-arrow-long-right review-swiper-button-next cursor-pointer transition-all">
                             <PiArrowCircleRightFill className="fill-liteGold" width="100%" height="100%" size={38} />
                         </div>
@@ -257,13 +231,13 @@ const ReservationPage = (salonData) => {
                         >
 
                             {
-                                day && day.map((item => (
+                                day?.map((item => (
 
                                     <SwiperSlide className={`w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded cursor-pointer`} title={item.date} key={item.id}
                                         onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}
                                     >
                                         <form action={formActionGetTimes} >
-                                            <button type="submit" className="w-full h-full" onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}>
+                                            <button type="submit" className="w-full h-full" onClick={() => { setTime([]); setIsLoading(true); setSelectedDate(item.id) }}>
                                                 <input type="hidden" name="day_id" value={selectedDate} />
                                                 <input type="hidden" name="provider_id" value={providerId} />
                                                 <input type="hidden" name="service_id" value={serviceId} />
@@ -294,12 +268,15 @@ const ReservationPage = (salonData) => {
             </div>
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
-                    time.length > 0 && time.map((data) => (
-                        <form action={onSubmit}>
+                    time?.map((data) => (
+                        <form action={formActionSendTime}>
                             <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
                             <button type="submit" disabled={data.reserved == true ? true : false} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
                                 // onClick={() => handleReserveTimeUpload(data)}
-                                onClick={() => { setIsLoading(true); setSelectedTime(data.id) }}
+                                onClick={() => {
+                                    toast.loading("در حال ثبت نوبت شما ...");
+                                    setSelectedTime(data.id)
+                                }}
                             >
                                 {data.time}
                             </button>
