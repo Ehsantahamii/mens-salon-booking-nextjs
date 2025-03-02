@@ -76,7 +76,7 @@ export async function checkOtp(stateOtp, formData) {
     otp,
     token: loginToken.value,
   });
-
+  console.log(data);
   if (data.status === "success") {
     cookies().delete("login_token");
     cookies().set({
@@ -90,12 +90,12 @@ export async function checkOtp(stateOtp, formData) {
     return {
       status: data.status,
       message: data.message,
-      user: data.data.name,
+      data: data.data.name,
     };
   } else {
     return {
       status: data.status,
-      message: "کد ورود نادرست است.",
+      message: data.message,
     };
   }
 }

@@ -112,7 +112,7 @@ export async function sendReserveTime(stateCellphone, formData) {
     return {
       status: data.status,
       data: data.data,
-      message: "نوبت شما با موفقیت ثبت شد.",
+      message: data.message,
     };
   } else {
     return {

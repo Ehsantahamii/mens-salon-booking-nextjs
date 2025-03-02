@@ -1,6 +1,6 @@
 "use client"
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
 import { PiArrowCircleLeftFill, PiArrowCircleRightFill } from "react-icons/pi";
@@ -15,6 +15,7 @@ import "./ReservationPage.css"
 import { useFormState } from "react-dom";
 import { getReserveTimes, sendReserveData, sendReserveTime } from "@/actions/ReserveActions";
 import SubmitBtn from "../module/SubmitBtn";
+import ReservedContext from "@/context/ReservedContext";
 
 
 const ReservationPage = (salonData) => {
@@ -27,7 +28,9 @@ const ReservationPage = (salonData) => {
     const [empty, isEmpty] = useState(true);
 
     const [isLoading, setIsLoading] = useState(false);
-    const router = useRouter()
+    const router = useRouter();
+    const { saveReservedData } = useContext(ReservedContext)
+
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
@@ -58,7 +61,7 @@ const ReservationPage = (salonData) => {
         // toast.update(saveReserveNotification, { render: stateSendTime?.message, type: stateSendTime.status, isLoading: false });
 
         if (stateSendTime.status === "success") {
-
+            saveReservedData(stateSendTime.data);
             setIsLoading(false);
             router.push("/reservation");
         }

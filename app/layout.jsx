@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import { Toaster } from 'react-hot-toast';
 import { ToastContainer } from "react-toastify";
+import { ReservedProvider } from "@/context/ReservedContext";
 
 const yekanBakh = localFont({
   src: "./fonts/YekanBakhMedium.woff",
@@ -27,21 +28,22 @@ export default function RootLayout({ children }) {
       <body
         className={`${yekanBakh.variable} ${geistMono.variable} antialiased `}
       >
-        <ToastContainer
-          position="top-center"
-          autoClose={5000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={true}
-          rtl={true}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          limit={2}
-        />
-        {/* <Header /> */}
-        {children}
+        <ReservedProvider>
+          <ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick={true}
+            rtl={true}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            limit={2}
+          />
+          {children}
+        </ReservedProvider>
       </body>
     </html>
   );
