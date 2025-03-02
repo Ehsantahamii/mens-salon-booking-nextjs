@@ -19,11 +19,12 @@ const CheckOtpForm = ({ setStep }) => {
             toast.success(stateOtp.message);
             router.push("/reservation");
 
-        } else if (stateOtp.user == 0) {
-            setStep(3)
         } else if (stateOtp.status === "error") {
             toast.error(stateOtp.message);
+        }
 
+        if (stateOtp.user == 0) {
+            setStep(3)
         }
 
     });

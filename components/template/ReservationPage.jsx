@@ -37,7 +37,9 @@ const ReservationPage = (salonData) => {
         if (stateReserveData.status === "success") {
             setDay(stateReserveData.data.days)
         } else if (stateReserveData.status === "error") {
-            toast.error("خطای شبکه")
+            toast.error(stateReserveData.message),{
+                toastId: 'stateReserveData',
+            }
         } else if (stateReserveData.status === "unavailable") {
             toast.error(stateReserveData.message);
 
