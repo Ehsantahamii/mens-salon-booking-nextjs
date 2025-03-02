@@ -11,7 +11,6 @@ const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const inputRefs = useRef([]);
     const [stateOtp, formActionOtp] = useFormState(checkOtp, {});
-    console.log(stateOtp)
 
     const router = useRouter()
 
@@ -26,6 +25,7 @@ const CheckOtpForm = ({ setStep }) => {
         }
 
     });
+    console.log(stateOtp)
 
 
     const handleChange = (index, value) => {

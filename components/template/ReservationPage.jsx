@@ -59,7 +59,6 @@ const ReservationPage = (salonData) => {
         toast.dismiss();
         toast(stateSendTime?.message, { type: `${stateSendTime.status}` });
         // toast.update(saveReserveNotification, { render: stateSendTime?.message, type: stateSendTime.status, isLoading: false });
-
         if (stateSendTime.status === "success") {
             saveReservedData(stateSendTime.data);
             setIsLoading(false);

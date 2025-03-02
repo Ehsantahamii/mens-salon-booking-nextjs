@@ -7,7 +7,7 @@ export const ReservedProvider = ({ children }) => {
   const [reservedData, setReservedData] = useState(null);
 
   const saveReservedData = (data) => {
-    setReserved(data);
+    setReservedData(data);
     console.log(reservedData);
   };
   return (
