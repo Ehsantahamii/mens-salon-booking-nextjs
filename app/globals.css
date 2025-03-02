@@ -41,3 +41,7 @@ select:focus-visible {
   filter: brightness(0.4) !important;
   -webkit-filter: brightness(0.4) !important;
 }
+.Toastify__toast {
+  color: #333;
+  font-weight: 500;
+}

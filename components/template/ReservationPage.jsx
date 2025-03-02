@@ -32,27 +32,20 @@ const ReservationPage = (salonData) => {
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
     useEffect(() => {
-        console.log(stateReserveData)
+        toast(stateReserveData?.message, { type: `${stateReserveData.status}` });
 
         if (stateReserveData.status === "success") {
             setDay(stateReserveData.data.days)
-        } else if (stateReserveData.status === "error") {
-            toast.error(stateReserveData.message),{
-                toastId: 'stateReserveData',
-            }
-        } else if (stateReserveData.status === "unavailable") {
-            toast.error(stateReserveData.message);
-
         }
 
-    });
+    }, [stateReserveData]);
+
     useEffect(() => {
+        toast(stateGetTimes?.message, { type: `${stateGetTimes.status}` });
         if (stateGetTimes.status === "success") {
             setTime(stateGetTimes.data.times);
             setIsLoading(false);
 
-        } else if (stateGetTimes.status === "error") {
-            toast.error(stateGetTimes.message);
         }
 
 
@@ -87,8 +80,6 @@ const ReservationPage = (salonData) => {
         if (stateSendTime.status === "success") {
             setIsLoading(false);
             router.push("/reservation");
-        } else if (stateSendTime.status === "error") {
-            toast.error(stateSendTime.message);
         }
     });
 

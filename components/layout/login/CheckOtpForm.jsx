@@ -15,15 +15,12 @@ const CheckOtpForm = ({ setStep }) => {
     const router = useRouter()
 
     useEffect(() => {
+        toast(stateOtp?.message, { type: `${stateOtp.status}` });
+
         if (stateOtp.status === "success" && stateOtp.user == 1) {
-            toast.success(stateOtp.message);
             router.push("/reservation");
 
-        } else if (stateOtp.status === "error") {
-            toast.error(stateOtp.message);
-        }
-
-        if (stateOtp.user == 0) {
+        } else if (stateOtp.user == 0) {
             setStep(3)
         }
 

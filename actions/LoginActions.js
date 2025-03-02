@@ -35,13 +35,12 @@ export async function login(stateCellphone, formData) {
 
     return {
       status: data.status,
-      data: data.data,
-      message: data.message,
+      data: data.data.otp,
     };
   } else {
     return {
-      status: "error",
-      message: "خطای شبکه",
+      status: data.status,
+      data: data.data,
     };
   }
 }

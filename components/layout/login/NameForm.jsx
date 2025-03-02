@@ -27,14 +27,11 @@ const NameForm = ({ setStep }) => {
         }
 
     }
-    console.log(stateUserName)
     useEffect(() => {
+        toast(stateUserName?.message, { type: `${stateUserName.status}` });
         if (stateUserName.status === "success") {
-            toast.success(stateUserName.message)
             router.push("/reservation");
 
-        } else if (stateUserName.status === "error") {
-            toast.error(stateUserName.message)
         }
     });
     return (

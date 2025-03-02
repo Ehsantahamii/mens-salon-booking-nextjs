@@ -12,7 +12,6 @@ import { toast } from "react-toastify";
 const LoginForm = ({ setStep }) => {
     const [stateMobile, formActionMobile] = useFormState(login, {});
     const [activeBtn, setActiveBtn] = useState(false);
-
     function isBtnActive(e) {
         const change = e.target.value
         if (change.length == 11) {
@@ -25,13 +24,9 @@ const LoginForm = ({ setStep }) => {
     }
 
     useEffect(() => {
+        toast(stateMobile?.data, { type: `${stateMobile.status}` });
         if (stateMobile.status === "success") {
-            toast.success(`کد: ${stateMobile.data.otp}`)
-
             setStep(2)
-
-        } else if (stateMobile.status === "error") {
-            toast.error(stateMobile.message)
         }
     });
     return (
