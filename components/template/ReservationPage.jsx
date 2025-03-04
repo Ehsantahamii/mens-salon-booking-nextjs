@@ -64,17 +64,6 @@ const ReservationPage = (salonData) => {
             setIsLoading(false);
         }
     };
-    // useEffect(() => {
-    //     if (isLoading) {
-    //         document.body.classList.add("loading-overlay");
-    //     } else {
-    //         document.body.classList.remove("loading-overlay");
-    //     }
-
-    //     return () => {
-    //         document.body.classList.remove("loading-overlay"); // Cleanup on unmount
-    //     };
-    // }, [isLoading]);
 
     useEffect(() => {
         toast(stateReserveData?.message, { type: `${stateReserveData.status}` });

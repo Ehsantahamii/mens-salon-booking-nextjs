@@ -7,9 +7,9 @@ import runFile from "../../lottie/Animation - 1741003650231.json";
 
 const page = () => {
     const { reservedData } = useContext(ReservedContext);
-    // window.onbeforeunload = function () {
-    //     return "you can not refresh the page";
-    // }
+    window.onbeforeunload = function () {
+        return "در صورت بارگذاری مجدد صفحه اطلاعات نمایش داده شده حذف می گردد.";
+    }
     return (
         <section className="w-[100vw] h-screen flex items-center justify-center">
             {
