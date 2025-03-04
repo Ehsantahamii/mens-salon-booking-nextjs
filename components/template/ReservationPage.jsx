@@ -21,6 +21,8 @@ import ReservedContext from "@/context/ReservedContext";
 const ReservationPage = (salonData) => {
     const [serviceId, setServiceId] = useState();
     const [providerId, setProviderId] = useState();
+    const [providers, setProviders] = useState();
+    console.log(providers)
     const [day, setDay] = useState([]);
     const [selectedDate, setSelectedDate] = useState();
     const [time, setTime] = useState([]);
@@ -34,6 +36,46 @@ const ReservationPage = (salonData) => {
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
+
+
+    const handleServiceChange = async (event) => {
+        const value = event.target.value;
+        setServiceId(value);
+        setIsLoading(true);
+        if (value === "" || value === "0") {
+            setProviders(null);
+            setIsLoading(false);
+
+            return;
+        }
+
+        try {
+            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/services/users", {
+                id: value,
+            });
+
+            setProviders(response.data.data);
+            console.log(response)
+        } catch (error) {
+            toast.error(error.message);
+            setProviders(null);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    useEffect(() => {
+        if (isLoading) {
+            document.body.classList.add("loading-overlay");
+        } else {
+            document.body.classList.remove("loading-overlay");
+        }
+
+        return () => {
+            document.body.classList.remove("loading-overlay"); // Cleanup on unmount
+        };
+    }, [isLoading]);
+
     useEffect(() => {
         toast(stateReserveData?.message, { type: `${stateReserveData.status}` });
 
@@ -63,87 +105,9 @@ const ReservationPage = (salonData) => {
             saveReservedData(stateSendTime.data);
             router.push("/result")
         }
-        console.log(stateSendTime)
     }, [stateSendTime]);
 
 
-    // const handleServiceIdChange = (event) => {
-    //     let changed = event.target.value
-    //     setForm((prevData) => ({
-    //         ...prevData,
-    //         service_id: changed * 1,
-    //     }));
-    // };
-    // const handleProviderIdChange = (event) => {
-    //     setForm((prevData) => ({
-    //         ...prevData,
-    //         provider_id: Number(event.target.value),
-    //     }));
-    // };
-    // const changeHandler = (event) => {
-    //     const name = event.target.name
-    //     setForm({ ...form, [name]: event.target.value });
-    // };
-
-    // const handleUpload = (event) => {
-    //     event.preventDefault();
-    //     const formData = new FormData();
-
-    //     for (let i in form) {
-    //         formData.append(i, form[i]);
-    //     }
-    //     setTime([]);
-    //     setDay([]);
-    //     setIsLoading(true);
-
-
-    //     axios.post(`https://admin.developmart.ir/api/v1/reservation/days`, formData, {
-    //         headers: {
-    //             'Content-Type': 'multipart/form-data',
-    //             // 'Authorization': `Bearer ${accessToken.value}`
-    //         },
-    //     }).then(res => {
-    //         setDay(res.data.data)
-    //         isEmpty(false);
-    //         setIsLoading(false);
-
-    //     })
-    //         .catch((error) => {
-    //             setIsLoading(false);
-    //             isEmpty(true);
-    //             console.log(error);
-    //             toast.error(`مشکلی بوجود آمده است !! ${error.message}`);
-
-    //         });
-    // }
-    // const handleDayUpload = async (item) => {
-    //     setIsLoading(true);
-    //     setSelectedDate(item.id);
-    //     setTime([]);
-    //     try {
-    //         const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/times", { day_id: selectedDate }, { headers: { 'Content-Type': 'application/json' } });
-    //         setTime(response.data.data);
-    //         setIsLoading(false);
-    //         console.log("Response:", response.data);
-    //     } catch (error) {
-    //         setIsLoading(false);
-    //         console.error("Error sending data:", error);
-    //     }
-    // };
-    // const handleReserveTimeUpload = async (data, event) => {
-    //     setIsLoading(true);
-    //     setSelectedTime(data.id)
-    //     try {
-    //         const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/book", { id: selectedTime });
-    //         console.log("Response:", response.data);
-    //         setIsLoading(false);
-    //         router.push(`${response.data.data.url}`)
-    //     } catch (error) {
-    //         console.error("Error sending data:", error);
-    //         setIsLoading(false);
-    //         toast.error(error.response.data.message)
-    //     }
-    // };
 
     return (
         <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
@@ -156,7 +120,7 @@ const ReservationPage = (salonData) => {
                         </label>
 
                         <select name="service_id" id="service_id" className="border-b-textColor transition-all focus:transition-all p-2 border-b-[1px]"
-                            onChange={(e) => setServiceId(e.target.value)}
+                            onChange={handleServiceChange}
                         >
                             <option value="">انتخاب کنید ...</option>
                             {
@@ -170,12 +134,12 @@ const ReservationPage = (salonData) => {
                         <label htmlFor="provider_id">
                             اجرا کننده خدمات را انتخاب کنید*
                         </label>
-                        <select name="provider_id" id="provider_id" className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
+                        <select name="provider_id" id="provider_id" disabled={!providers} className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
                             onChange={(e) => setProviderId(e.target.value)}
                         >
                             <option value="">انتخاب کنید ...</option>
                             {
-                                salonData.salonData.providers && salonData.salonData.providers.map((item) => {
+                                providers?.map((item) => {
                                     return <option className="cursor-pointer px-2" key={item.id} value={+item.id}>{item.name}</option>
                                 })
                             }
