@@ -36,7 +36,7 @@ const NameForm = ({ setStep }) => {
     });
     return (
         <section className="w-[100dvw] h-[90vh] md:h-svh flex gap-8 justify-center items-center">
-            <div className="w-[85%] flex flex-col justify-between p-2 max-w-[380px] min-h-[180px] shadow rounded-xl ">
+            <div className="w-[85%] bg-white flex flex-col justify-between pt-12 px-4 max-w-[380px] min-h-[180px] shadow rounded-xl ">
                 <form className="w-[85%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionUserName}>
                     <div className="flex flex-col w-full relative">
                         <MdPerson className="absolute left-4 bottom-[0.8rem] opacity-50" />
@@ -49,7 +49,7 @@ const NameForm = ({ setStep }) => {
                     </div>
                     <SubmitBtn title="ارسال" activeBtn={activeBtn} style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`} />
                 </form>
-                <p className="text-[10px] py-1 text-center">
+                <p className="text-[10px] pb-2 pt-4 text-center">
                     طراحی شده توسط
                     <Link className="px-1" href="https://developmart.ir/">
                         Developmart.ir

@@ -31,7 +31,7 @@ const LoginForm = ({ setStep }) => {
     });
     return (
         <section className="w-[100dvw] h-[90vh] md:h-svh flex gap-8 justify-center items-center">
-            <div className="w-[85%] flex flex-col justify-between p-2 max-w-[380px] min-h-[320px] shadow rounded-xl ">
+            <div className="w-[85%] bg-white flex flex-col justify-between p-2 max-w-[380px] min-h-[320px] shadow rounded-xl ">
                 <h1 className="text-[24px] font-semibold py-4 text-center">
                     سامانه رزرو نوبت
                 </h1>

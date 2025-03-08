@@ -16,13 +16,13 @@ import { useFormState } from "react-dom";
 import { getReserveTimes, sendReserveData, sendReserveTime } from "@/actions/ReserveActions";
 import SubmitBtn from "../module/SubmitBtn";
 import ReservedContext from "@/context/ReservedContext";
+import Navbar from "../layout/Navbar";
 
 
 const ReservationPage = (salonData) => {
     const [serviceId, setServiceId] = useState();
     const [providerId, setProviderId] = useState();
     const [providers, setProviders] = useState();
-    console.log(providers)
     const [day, setDay] = useState([]);
     const [selectedDate, setSelectedDate] = useState();
     const [time, setTime] = useState([]);
@@ -34,7 +34,7 @@ const ReservationPage = (salonData) => {
     const { saveReservedData } = useContext(ReservedContext)
 
     const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
-    const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
+    // const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
 
 
@@ -64,6 +64,30 @@ const ReservationPage = (salonData) => {
             setIsLoading(false);
         }
     };
+    const handleGetHours = async (event) => {
+        event.preventDefault()
+        setTime([]);
+        setIsLoading(true);
+
+        try {
+            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/times", {
+                day_id: selectedDate,
+                service_id: serviceId,
+                provider_id: providerId,
+
+            });
+
+            setTime(response.data.data.times);
+            console.log(response)
+        } catch (error) {
+            toast.error(error.message);
+            setTime(null);
+
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
 
     useEffect(() => {
         toast(stateReserveData?.message, { type: `${stateReserveData.status}` });
@@ -75,16 +99,6 @@ const ReservationPage = (salonData) => {
 
     }, [stateReserveData]);
 
-    useEffect(() => {
-        toast(stateGetTimes?.message, { type: `${stateGetTimes.status}` });
-        if (stateGetTimes.status === "success") {
-            setTime(stateGetTimes.data.times);
-            setIsLoading(false);
-
-        }
-
-
-    });
 
     useEffect(() => {
         toast.dismiss();
@@ -96,10 +110,9 @@ const ReservationPage = (salonData) => {
         }
     }, [stateSendTime]);
 
-
-
     return (
         <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
+            <Navbar />
             <form action={formActionReserveData} className="flex max-w-[640px] flex-col gap-8  mx-auto py-8" encType="multipart/form-data">
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-12">
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
@@ -191,20 +204,14 @@ const ReservationPage = (salonData) => {
                                     <SwiperSlide className={`w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded cursor-pointer`} title={item.date} key={item.id}
                                         onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}
                                     >
-                                        <form action={formActionGetTimes} >
-                                            <button type="submit" className="w-full h-full" onClick={() => { setTime([]); setIsLoading(true); setSelectedDate(item.id) }}>
-                                                <input type="hidden" name="day_id" value={selectedDate} />
-                                                <input type="hidden" name="provider_id" value={providerId} />
-                                                <input type="hidden" name="service_id" value={serviceId} />
+                                        <form onSubmit={handleGetHours} >
+                                            <button type="submit" className="w-full h-full" onClick={() => { setSelectedDate(item.id) }}>
                                                 <h3 className="font-medium">
                                                     {item.label}
                                                 </h3>
                                                 <h4 >
                                                     {item.day}
                                                 </h4>
-                                                {
-                                                    day.first_free_time != null && day.first_free_time.date === item.date ? <p className="text-[10px]">اولین روز خالی</p> : <></>
-                                                }
                                             </button>
                                         </form>
 

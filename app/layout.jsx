@@ -26,7 +26,7 @@ export default function RootLayout({ children }) {
     <html lang="fa" dir="rtl">
 
       <body
-        className={`${yekanBakh.variable} ${geistMono.variable} antialiased `}
+        className={`${yekanBakh.variable} ${geistMono.variable} antialiased bg-slate-50 `}
       >
         <ReservedProvider>
           <ToastContainer
