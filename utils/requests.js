@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 const getFetch = async (url, headers = {}) => {
   const res = await fetch(`https://admin.developmart.ir${url}`, {
-    cache: "no-cache",
+    cache: "no-store",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",

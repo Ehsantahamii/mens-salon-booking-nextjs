@@ -231,7 +231,7 @@ const ReservationPage = (salonData) => {
                             {
                                 day?.map((item => (
 
-                                    <SwiperSlide className={`day-slide relative w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded-lg cursor-pointer before:content-[attr(before)]`} before={`${item.date === firstFreeDate.date ? "اولین نوبت خالی" : ""}`} title={item.date} key={item.id}
+                                    <SwiperSlide className={`day-slide relative w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded-lg cursor-pointer before:content-[attr(before)]`} before={`${item.date === firstFreeDate?.date ? "اولین نوبت خالی" : ""}`} title={item.date} key={item.id}
                                         onClick={() => { setSelectedDate(item.id) }}
                                     >
                                         <form onSubmit={handleGetHours} >
@@ -243,9 +243,9 @@ const ReservationPage = (salonData) => {
                                                     {item.day}
                                                 </h4>
 
-                                                <span className={`${item.date === firstFreeDate.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
+                                                <span className={`${item.date === firstFreeDate?.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
                                                     {
-                                                        item.date === firstFreeDate.date ? "اولین نوبت خالی" : "-"
+                                                        item.date === firstFreeDate?.date ? "اولین نوبت خالی" : "-"
                                                     }
                                                 </span>
                                             </button>
