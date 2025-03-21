@@ -4,11 +4,11 @@
 const ReservedListPage = (data) => {
     console.log(data)
     return (
-        <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-center  items-center gap-4">
+        <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-center  gap-4 py-4">
             {
-                data ?
+                data.data ?
                     data?.data?.data?.times?.map((data, index) => (
-                        <div className=" md:max-w-full text-black shadow bg-white py-8 px-6 rounded-xl flex gap-6 text-[1em]" key={index}>
+                        <div className="w-[95%] mx-auto md:max-w-full flex-wrap justify-between text-black shadow bg-white py-8 px-6 rounded-xl flex  text-[1em]" key={index}>
                             <p >
                                 <span className="opacity-60">
                                     سرویس:
@@ -45,9 +45,9 @@ const ReservedListPage = (data) => {
 
                     ))
                     :
-                    <p>
-                        هیچ نوبت ثبت شده ای برای نمایش وجود ندارد
-                    </p>
+                    (<p>
+                        هیچ نوبت ثبت شده ای برای نمایش وجود ندارد.
+                    </p>)
 
             }
         </ div>
