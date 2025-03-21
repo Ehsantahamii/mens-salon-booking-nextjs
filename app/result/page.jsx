@@ -5,7 +5,7 @@ import { useContext } from "react";
 import Lottie from 'react-lottie-player';
 import runFile from "../../lottie/Animation - 1741003650231.json";
 
-const rea = () => {
+const ResultPage = () => {
     const { reservedData } = useContext(ReservedContext);
     return (
         <section className="w-[100vw] h-screen flex items-center justify-center">
@@ -69,4 +69,4 @@ const rea = () => {
     );
 };
 
-export default page;
+export default ResultPage;
