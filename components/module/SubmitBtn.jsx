@@ -1,15 +1,15 @@
 "use client"
 import { useFormStatus } from 'react-dom'
 
-const SubmitBtn = ({ title, style, activeBtn, fun }) => {
+const SubmitBtn = ({ title, style, activeBtn, setDay }) => {
     const { pending } = useFormStatus();
     return (
         <button type='submit'
 
             disabled={activeBtn && !activeBtn} className={`${style} ${activeBtn && !activeBtn ? "cursor-not-allowed" : "cursor-pointer"} ${pending ? "bg-white" : "bg-liteGold"}`}
             onClick={() => {
-                if (fun) {
-                    return fun()
+                if (setDay) {
+                    return setDay()
                 }
             }}
         >

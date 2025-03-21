@@ -8,7 +8,6 @@ export const ReservedProvider = ({ children }) => {
 
   const saveReservedData = (data) => {
     setReservedData(data);
-    console.log(reservedData);
   };
   return (
     <ReservedContext.Provider value={{ reservedData, saveReservedData }}>

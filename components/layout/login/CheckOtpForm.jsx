@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import ReservedContext from '@/context/ReservedContext';
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+    const [activeBtn, setActiveBtn] = useState(false);
+
     const inputRefs = useRef([]);
     const [stateOtp, formActionOtp] = useFormState(checkOtp, {});
 
@@ -32,15 +34,21 @@ const CheckOtpForm = ({ setStep }) => {
         if (isNaN(value)) return;
         const newOtp = [...otp];
         newOtp[index] = value;
+        console.log(index)
         setOtp(newOtp);
 
         if (value && index < otp.length - 1) {
             inputRefs.current[index + 1].focus();
         }
+        if (index == 5) {
+            setActiveBtn(true)
+        } else if (index < 5) {
+            setActiveBtn(false)
+        }
     };
 
     return (
-        <section className="w-[100dvw] h-[90vh] md:h-svh flex justify-center items-center">
+        <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex justify-center items-center">
             <div className="w-[90%] max-w-[420px] bg-white flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">
                 <FaArrowCircleLeft color='#333' title='بازگشت' size={20} className='cursor-pointer absolute left-4 top-4' onClick={() => setStep(1)} />
                 <h2 className='text-[26px]'>
@@ -66,7 +74,7 @@ const CheckOtpForm = ({ setStep }) => {
                     <input type="hidden" name="otp" id="otp" value={otp.join("")} />
                     <SubmitBtn
                         title="تأیید"
-                        style="text-white px-6 py-2 rounded-md"
+                        style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`}
                     />
 
                 </form>

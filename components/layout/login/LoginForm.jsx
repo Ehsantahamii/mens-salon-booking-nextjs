@@ -12,6 +12,7 @@ import { toast } from "react-toastify";
 const LoginForm = ({ setStep }) => {
     const [stateMobile, formActionMobile] = useFormState(login, {});
     const [activeBtn, setActiveBtn] = useState(false);
+
     function isBtnActive(e) {
         const change = e.target.value
         if (change.length == 11) {
@@ -30,7 +31,7 @@ const LoginForm = ({ setStep }) => {
         }
     });
     return (
-        <section className="w-[100dvw] h-[90vh] md:h-svh flex gap-8 justify-center items-center">
+        <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex gap-8 justify-center items-center">
             <div className="w-[85%] bg-white flex flex-col justify-between p-2 max-w-[380px] min-h-[320px] shadow rounded-xl ">
                 <h1 className="text-[24px] font-semibold py-4 text-center">
                     سامانه رزرو نوبت
@@ -42,7 +43,7 @@ const LoginForm = ({ setStep }) => {
                         <label htmlFor="mobile" className="text-[18px] font-normal py-2">
                             تلفن همراه خود را وارد نمایید.
                         </label>
-                        <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
+                        <input  required className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
                             maxLength={11}
                             type="text" name="mobile" id="mobile" placeholder="09100000000" onChange={isBtnActive} />
                     </div>

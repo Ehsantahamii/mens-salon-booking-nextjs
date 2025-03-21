@@ -10,7 +10,7 @@ const page = () => {
     return (
         <section className="w-[100vw] h-screen flex items-center justify-center">
             {
-                reservedData && <div className="w-[85%] max-w-[320px] shadow-md rounded-lg px-6 py-8">
+                reservedData && <div className="w-[85%] bg-white max-w-[320px] shadow-md rounded-lg px-6 py-8">
                     <div className="flex flex-col justify-center items-center gap-4 font-semibold">
                         <Lottie animationData={runFile} play loop={false} className='w-28 h-28 mx-auto' />
                         {/* <img className="w-24 h-24 mx-auto" src="/images/ok-result.png" alt="ok-result" /> */}

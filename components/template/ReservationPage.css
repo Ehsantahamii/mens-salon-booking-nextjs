@@ -6,3 +6,18 @@
   -ms-transition: all ease 0.3s;
   -o-transition: all ease 0.3s;
 }
+.day-slide::before {
+  color: black;
+  background: lightgoldenrodyellow;
+  position: absolute;
+  bottom: 150%;
+  left: 50%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 160px;
+  border-radius: 3px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}

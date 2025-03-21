@@ -76,7 +76,6 @@ export async function checkOtp(stateOtp, formData) {
     otp,
     token: loginToken.value,
   });
-  console.log(data);
   if (data.status === "success") {
     cookies().delete("login_token");
     cookies().set({

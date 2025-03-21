@@ -13,10 +13,10 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
 import { useFormState } from "react-dom";
-import { getReserveTimes, sendReserveData, sendReserveTime } from "@/actions/ReserveActions";
-import SubmitBtn from "../module/SubmitBtn";
+import { sendReserveTime } from "@/actions/ReserveActions";
 import ReservedContext from "@/context/ReservedContext";
-import Navbar from "../layout/Navbar";
+import Lottie from 'react-lottie-player';
+import runFile from "../../lottie/Animation - 1741943887225.json";
 
 
 const ReservationPage = (salonData) => {
@@ -27,16 +27,13 @@ const ReservationPage = (salonData) => {
     const [selectedDate, setSelectedDate] = useState();
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
+    const [firstFreeDate, setFirstFreeDate] = useState({});
     const [empty, isEmpty] = useState(true);
-
     const [isLoading, setIsLoading] = useState(false);
+    const [searchLoading, setSearchLoading] = useState(false);
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext)
-
-    const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
-    // const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
-
 
     const handleServiceChange = async (event) => {
         const value = event.target.value;
@@ -55,7 +52,6 @@ const ReservationPage = (salonData) => {
             });
 
             setProviders(response.data.data);
-            console.log(response)
         } catch (error) {
             toast.error(error.message);
             setProviders(null);
@@ -64,6 +60,48 @@ const ReservationPage = (salonData) => {
             setIsLoading(false);
         }
     };
+    const handleSearchBtn = async (event) => {
+        event.preventDefault()
+        setDay(null);
+        setTime(null)
+        setSearchLoading(true);
+
+        // Validate serviceId and providerId
+        if (!serviceId || serviceId <= 0) {
+            toast.dismiss();
+            toast.error("لطفا یکی از خدمات ارائه  شده را انتخاب کنید.");
+            setSearchLoading(false);
+            return;
+        }
+
+        if (!providerId || providerId <= 0) {
+            toast.dismiss();
+            toast.error("لطفا یکی از خدمات دهندگان ارائه  شده را انتخاب کنید.");
+            setSearchLoading(false);
+            return;
+        }
+
+
+        try {
+            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/days", {
+                service_id: serviceId,
+                provider_id: providerId,
+
+            });
+
+            setDay(response.data.data.days);
+            setFirstFreeDate(response.data.data.first_free_time);
+        } catch (error) {
+            toast.error(error.message);
+            toast.error("خطایی در ارسال درخواست رخ داد");
+            setDay(null);
+            setTime(null)
+
+        } finally {
+            setSearchLoading(false);
+        }
+    };
+
     const handleGetHours = async (event) => {
         event.preventDefault()
         setTime([]);
@@ -80,30 +118,21 @@ const ReservationPage = (salonData) => {
             setTime(response.data.data.times);
             console.log(response)
         } catch (error) {
+            console.log(error)
+
             toast.error(error.message);
             setTime(null);
+            setIsLoading(false);
+
 
         } finally {
             setIsLoading(false);
         }
     };
 
-
-    useEffect(() => {
-        toast(stateReserveData?.message, { type: `${stateReserveData.status}` });
-
-        if (stateReserveData.status === "success") {
-            setDay(null);
-            setDay(stateReserveData.data.days)
-        }
-
-    }, [stateReserveData]);
-
-
     useEffect(() => {
         toast.dismiss();
         toast(stateSendTime?.message, { type: `${stateSendTime.status}` });
-        // toast.update(saveReserveNotification, { render: stateSendTime?.message, type: stateSendTime.status, isLoading: false });
         if (stateSendTime.status === "success") {
             saveReservedData(stateSendTime.data);
             router.push("/result")
@@ -112,13 +141,11 @@ const ReservationPage = (salonData) => {
 
     return (
         <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
-            <Navbar />
-            <form action={formActionReserveData} className="flex max-w-[640px] flex-col gap-8  mx-auto py-8" encType="multipart/form-data">
+            <form onSubmit={handleSearchBtn} className="flex max-w-[640px] flex-col gap-8  mx-auto py-8" encType="multipart/form-data">
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-12">
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
                         <label htmlFor="service_id">
                             خدمات مورد نظر خود را انتخاب کنید*
-
                         </label>
 
                         <select name="service_id" id="service_id" className="border-b-textColor transition-all focus:transition-all p-2 border-b-[1px]"
@@ -148,19 +175,22 @@ const ReservationPage = (salonData) => {
                         </select>
                     </div>
                 </div>
-
-                <SubmitBtn title="جستوجو" style="max-w-[150px] mx-auto px-4 py-2 bg-liteGold rounded-lg" fun={setDay} />
                 {
-                    isLoading &&
-                    <div class="text-center">
-                        <div
-                            class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
-                        ></div>
-                    </div>
+                    searchLoading ?
+                        <div class="text-center">
+                            <div
+                                class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
+                            ></div>
+                        </div>
 
+                        :
+                        <button type="submit" className="max-w-[150px] mx-auto px-4 py-2 bg-liteGold rounded-lg"  >
+                            جستوجو
+                        </button>
                 }
 
             </form>
+
             <div className="max-w-[640px] mx-auto">
                 {
                     empty == false && day.length == 0 && <p>نوبتی جهت انتخاب یافت نشد.</p>
@@ -201,17 +231,23 @@ const ReservationPage = (salonData) => {
                             {
                                 day?.map((item => (
 
-                                    <SwiperSlide className={`w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded cursor-pointer`} title={item.date} key={item.id}
-                                        onClick={() => { setIsLoading(true); setSelectedDate(item.id) }}
+                                    <SwiperSlide className={`day-slide relative w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded-lg cursor-pointer before:content-[attr(before)]`} before={`${item.date === firstFreeDate.date ? "اولین نوبت خالی" : ""}`} title={item.date} key={item.id}
+                                        onClick={() => { setSelectedDate(item.id) }}
                                     >
                                         <form onSubmit={handleGetHours} >
-                                            <button type="submit" className="w-full h-full" onClick={() => { setSelectedDate(item.id) }}>
+                                            <button type="submit" disabled={isLoading} className={`w-full h-full `} onClick={() => { setSelectedDate(item.id) }}>
                                                 <h3 className="font-medium">
                                                     {item.label}
                                                 </h3>
-                                                <h4 >
+                                                <h4 className="mb-1" >
                                                     {item.day}
                                                 </h4>
+
+                                                <span className={`${item.date === firstFreeDate.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
+                                                    {
+                                                        item.date === firstFreeDate.date ? "اولین نوبت خالی" : "-"
+                                                    }
+                                                </span>
                                             </button>
                                         </form>
 
@@ -221,6 +257,7 @@ const ReservationPage = (salonData) => {
                             }
                         </Swiper>
 
+
                         <div className="icon-arrow-long-left review-swiper-button-prev cursor-pointer transition-opacity" >
                             <PiArrowCircleLeftFill width="100%" height="100%" size={38} className="fill-liteGold" />
                         </div>
@@ -228,12 +265,22 @@ const ReservationPage = (salonData) => {
                 }
 
             </div>
+            {
+                isLoading &&
+                <div class="text-center">
+                    <div
+                        class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
+                    ></div>
+                </div>
+
+            }
+
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
                     time?.map((data) => (
                         <form action={formActionSendTime}>
                             <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
-                            <button type="submit" disabled={data.reserved == true ? true : false} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
+                            <button type="submit" disabled={data.reserved == true ? true : false || isLoading == true} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
                                 // onClick={() => handleReserveTimeUpload(data)}
                                 onClick={() => {
                                     toast.loading("در حال ثبت نوبت شما ...");
