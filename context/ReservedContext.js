@@ -4,7 +4,7 @@ import { createContext, useState } from "react";
 const ReservedContext = createContext();
 
 export const ReservedProvider = ({ children }) => {
-  const [reservedData, setReservedData] = useState(null);
+  const [reservedData, setReservedData] = useState("");
 
   const saveReservedData = (data) => {
     setReservedData(data);

@@ -21,7 +21,7 @@ const MainPage = () => {
     useEffect(() => {
         if (stateReserveData.loginStatus || stateGetTimes.loginStatus || stateSendTime.loginStatus === false) {
             toast.error("حساب کاربری شما منقضی شده است لطفا دوباره وارد شوید.")
-            router.push("/login")
+            router.push("/")
         }
     });
 
