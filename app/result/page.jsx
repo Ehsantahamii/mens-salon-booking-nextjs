@@ -4,6 +4,7 @@ import ReservedContext from "@/context/ReservedContext";
 import { useContext } from "react";
 import Lottie from 'react-lottie-player';
 import runFile from "../../lottie/Animation - 1741003650231.json";
+import Link from "next/link";
 
 const ResultPage = () => {
     const { reservedData } = useContext(ReservedContext);
@@ -14,7 +15,6 @@ const ResultPage = () => {
                     <div className="w-[85%] bg-white max-w-[320px] shadow-md rounded-lg px-6 py-8">
                         <div className="flex flex-col justify-center items-center gap-4 font-semibold">
                             <Lottie animationData={runFile} play loop={false} className='w-28 h-28 mx-auto' />
-                            {/* <img className="w-24 h-24 mx-auto" src="/images/ok-result.png" alt="ok-result" /> */}
                             <h2>
                                 نوبت شما با موفقیت ثبت شد.
                             </h2>
@@ -60,6 +60,9 @@ const ResultPage = () => {
                                     }
                                 </div>
                             </div>
+                        </div>
+                        <div className="w-full flex justify-end">
+                            <Link className="text-[14px] font-light underline" href="/reserved-list">مشاهده</Link>
                         </div>
                     </div>
                     : ""

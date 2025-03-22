@@ -12,6 +12,7 @@ module.exports = {
         textColor: "#3a3845",
         boxBg: "#3a3845",
         liteGold: "#ffd39a",
+        semiLiteGold: "#ffd39ab7",
         navColor: "#6a6a75",
       },
     },

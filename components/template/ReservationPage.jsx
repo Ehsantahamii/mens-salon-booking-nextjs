@@ -28,12 +28,14 @@ const ReservationPage = (salonData) => {
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
     const [firstFreeDate, setFirstFreeDate] = useState({});
+    console.log(firstFreeDate)
     const [empty, isEmpty] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext)
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
+    console.log(stateSendTime)
 
     const handleServiceChange = async (event) => {
         const value = event.target.value;
@@ -63,6 +65,7 @@ const ReservationPage = (salonData) => {
     const handleSearchBtn = async (event) => {
         event.preventDefault()
         setDay(null);
+        setFirstFreeDate("")
         setTime(null)
         setSearchLoading(true);
 
@@ -133,10 +136,17 @@ const ReservationPage = (salonData) => {
     useEffect(() => {
         toast.dismiss();
         toast(stateSendTime?.message, { type: `${stateSendTime.status}` });
+
+        if (stateSendTime.loginStatus === "no-login") {
+            setTimeout(() => {
+                router.push("/")
+            }, 3000)
+        }
         if (stateSendTime.status === "success") {
             saveReservedData(stateSendTime.data);
             router.push("/result")
         }
+
     }, [stateSendTime]);
 
     return (
@@ -184,8 +194,8 @@ const ReservationPage = (salonData) => {
                         </div>
 
                         :
-                        <button type="submit" className="max-w-[150px] mx-auto px-4 py-2 bg-liteGold rounded-lg"  >
-                            جستوجو
+                        <button type="submit" className="max-w-[150px] mx-auto px-4 py-2 hover:bg-liteGold  bg-semiLiteGold transition-colors rounded-lg"  >
+                            جستجوی
                         </button>
                 }
 
@@ -196,12 +206,39 @@ const ReservationPage = (salonData) => {
                     empty == false && day.length == 0 && <p>نوبتی جهت انتخاب یافت نشد.</p>
                 }
                 {
+                    firstFreeDate.day &&
+                    <form action={formActionSendTime} className=" flex justify-between rounded-lg shadow items-center  my-2 py-1 px-2 text-[14px]">
+                        <div>
+                            اولین نوبت خالی برای شما برابربا
+                            {firstFreeDate?.day}
+                            ساعت
+                            {firstFreeDate?.time}
+                            می باشد.
+                        </div>
+                        <div className="flex justify-end items-center">
+                            <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
+                            <button
+                                className="hover:bg-liteGold  bg-semiLiteGold transition-colors  px-4 flex items-center justify-center py-1 shadow rounded-lg text-[14px] cursor-pointer"
+                                onClick={() => {
+                                    toast.loading("در حال ثبت نوبت شما ...");
+                                    setSelectedTime(firstFreeDate.time_id)
+                                }}
+                                type="submit"
+                                disabled={isLoading}
+                            >
+
+                                رزرو
+                            </button>
+                        </div>
+                    </form>
+                }
+
+                {
 
                     day?.length > 0 && <div className="swiper-container flex gap-6 justify-between items-center">
                         <div className="icon-arrow-long-right review-swiper-button-next cursor-pointer transition-all">
                             <PiArrowCircleRightFill className="fill-liteGold" width="100%" height="100%" size={38} />
                         </div>
-
 
                         <Swiper
                             className="day-swiper w-[90%] cursor-grab"
@@ -243,11 +280,11 @@ const ReservationPage = (salonData) => {
                                                     {item.day}
                                                 </h4>
 
-                                                <span className={`${item.date === firstFreeDate?.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
+                                                {/* <span className={`${item.date === firstFreeDate?.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
                                                     {
                                                         item.date === firstFreeDate?.date ? "اولین نوبت خالی" : "-"
                                                     }
-                                                </span>
+                                                </span> */}
                                             </button>
                                         </form>
 
@@ -281,7 +318,6 @@ const ReservationPage = (salonData) => {
                         <form action={formActionSendTime}>
                             <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
                             <button type="submit" disabled={data.reserved == true ? true : false || isLoading == true} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
-                                // onClick={() => handleReserveTimeUpload(data)}
                                 onClick={() => {
                                     toast.loading("در حال ثبت نوبت شما ...");
                                     setSelectedTime(data.id)

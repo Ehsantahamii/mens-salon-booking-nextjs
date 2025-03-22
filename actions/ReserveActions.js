@@ -1,6 +1,7 @@
 "use server";
 import { postFetch } from "@/utils/requests";
 import { revalidatePath, revalidateTag } from "next/cache";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 
 export async function sendReserveData(stateCellphone, formData) {
@@ -55,15 +56,6 @@ export async function getReserveTimes(stateCellphone, formData) {
       message: "لطفا یکی از روزهای هفته را انتخاب کنید.",
     };
   }
-  const accessToken = cookies().get("access_token");
-  // if (!accessToken) {
-  //   return {
-  //     status: "error",
-  //     loginStatus: false,
-  //     message: "ایتدا وارد شوید.",
-  //   };
-  // }
-
   const data = await postFetch("/api/v1/reservation/times", {
     day_id,
     service_id,
@@ -92,13 +84,13 @@ export async function sendReserveTime(stateCellphone, formData) {
     };
   }
   const accessToken = cookies().get("access_token");
-  // if (!accessToken) {
-  //   return {
-  //     status: "error",
-  //     loginStatus: false,
-  //     message: "ابتدا وارد شوید.",
-  //   };
-  // }
+  if (!accessToken) {
+    return {
+      status: "error",
+      loginStatus: "no-login",
+      message: "لطفا مجددا وارد شوید.",
+    };
+  }
 
   const data = await postFetch(
     "/api/v1/reservation/book",
