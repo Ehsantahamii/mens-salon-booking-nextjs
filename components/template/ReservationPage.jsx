@@ -158,7 +158,7 @@ const ReservationPage = (salonData) => {
                             خدمات مورد نظر خود را انتخاب کنید*
                         </label>
 
-                        <select name="service_id" id="service_id" className="border-b-textColor transition-all focus:transition-all p-2 border-b-[1px]"
+                        <select name="service_id" id="service_id" className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
                             onChange={handleServiceChange}
                         >
                             <option value="">انتخاب کنید ...</option>

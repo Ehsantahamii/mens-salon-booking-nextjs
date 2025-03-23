@@ -113,3 +113,42 @@ export async function sendReserveTime(stateCellphone, formData) {
     };
   }
 }
+export async function cancelReserved(stateCancelReserved, formData) {
+  const time_id = formData.get("time_id");
+
+  if (time_id === "") {
+    return {
+      status: "error",
+      message: "نوبت رزرو شده ای جهت لغو شدن یافت نشد!",
+    };
+  }
+  const accessToken = cookies().get("access_token");
+  if (!accessToken) {
+    return {
+      status: "error",
+      loginStatus: "no-login",
+      message: "لطفا مجددا وارد شوید.",
+    };
+  }
+
+  const data = await postFetch(
+    "/api/v1/user/cancel-reservation",
+    { time_id },
+    {
+      Authorization: `Bearer ${accessToken.value}`,
+    }
+  );
+  if (data.status === "success") {
+    revalidatePath("/reserved-list");
+    return {
+      status: data.status,
+      data: data.data,
+      message: data.message,
+    };
+  } else {
+    return {
+      status: data.status,
+      message: data.message,
+    };
+  }
+}
