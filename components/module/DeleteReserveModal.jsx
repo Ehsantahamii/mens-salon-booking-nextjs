@@ -6,17 +6,15 @@ import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 
 const DeleteReserveModal = ({ data, modal, setOpenModal }) => {
-    const [timeID, setTimeID] = useState();
-    console.log(timeID)
+    console.log(data)
     const [stateCancelReserved, formActionCancelReserved] = useFormState(cancelReserved, {});
     useEffect(() => {
-        console.log(stateCancelReserved)
         toast(stateCancelReserved?.data, { type: `${stateCancelReserved.status}` });
         if (stateCancelReserved.status === "success") {
-            toast(stateCancelReserved?.data, { type: `${stateCancelReserved.status}` });
+            toast(stateCancelReserved?.message, { type: `${stateCancelReserved.status}` });
             toast("ok");
         }
-    });
+    },[stateCancelReserved]);
 
     return (
         <div className="modal-1 fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50">
@@ -39,7 +37,7 @@ const DeleteReserveModal = ({ data, modal, setOpenModal }) => {
                     >بله</button>
                 </form>
             </div>
-        </div>
+        </div >
     );
 };
 

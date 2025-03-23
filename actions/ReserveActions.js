@@ -142,7 +142,6 @@ export async function cancelReserved(stateCancelReserved, formData) {
     revalidatePath("/reserved-list");
     return {
       status: data.status,
-      data: data.data,
       message: data.message,
     };
   } else {

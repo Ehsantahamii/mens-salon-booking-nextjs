@@ -28,14 +28,12 @@ const ReservationPage = (salonData) => {
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
     const [firstFreeDate, setFirstFreeDate] = useState({});
-    console.log(firstFreeDate)
     const [empty, isEmpty] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext)
     const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
-    console.log(stateSendTime)
 
     const handleServiceChange = async (event) => {
         const value = event.target.value;
