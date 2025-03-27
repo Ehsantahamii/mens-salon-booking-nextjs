@@ -7,17 +7,16 @@ import { PiArrowCircleLeftFill, PiArrowCircleRightFill } from "react-icons/pi";
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { Navigation } from 'swiper/modules';
+import dynamic from "next/dynamic";
 
+import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
 import { useActionState } from "react";
 import { sendReserveTime } from "@/actions/ReserveActions";
 import ReservedContext from "@/context/ReservedContext";
-import Lottie from 'react-lottie-player';
-import runFile from "../../lottie/Animation - 1741943887225.json";
-import GuidBox from "../module/GuidBox";
+const GuidBox = dynamic(() => import('../module/GuidBox'), { ssr: false })
 
 
 const ReservationPage = (salonData) => {
