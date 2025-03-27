@@ -87,7 +87,7 @@ const CheckOtpForm = ({ setStep }) => {
                             <input
                                 key={index}
                                 type="text"
-                                autocomplete="one-time-code"
+                                autoComplete="one-time-code"
                                 maxLength="1"
                                 className="w-[2.3rem] h-[2.3rem] sm:w-12 sm:h-12 text-center text-xl border rounded-md"
                                 value={digit}

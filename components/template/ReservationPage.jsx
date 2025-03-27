@@ -17,6 +17,7 @@ import { sendReserveTime } from "@/actions/ReserveActions";
 import ReservedContext from "@/context/ReservedContext";
 import Lottie from 'react-lottie-player';
 import runFile from "../../lottie/Animation - 1741943887225.json";
+import GuidBox from "../module/GuidBox";
 
 
 const ReservationPage = (salonData) => {
@@ -324,6 +325,7 @@ const ReservationPage = (salonData) => {
                     ))
                 }
             </div>
+            <GuidBox />
         </section >
     );
 };
