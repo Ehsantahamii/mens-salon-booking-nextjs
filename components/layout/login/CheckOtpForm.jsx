@@ -1,7 +1,7 @@
 "use client"
 import { checkOtp } from '@/actions/LoginActions';
 import { useEffect, useState, useRef, useContext } from 'react';
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
 import { toast } from "react-toastify";
 import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
@@ -12,7 +12,7 @@ const CheckOtpForm = ({ setStep }) => {
     const [activeBtn, setActiveBtn] = useState(false);
 
     const inputRefs = useRef([]);
-    const [stateOtp, formActionOtp] = useFormState(checkOtp, {});
+    const [stateOtp, formActionOtp] = useActionState(checkOtp, {});
 
     const router = useRouter()
 
@@ -34,7 +34,6 @@ const CheckOtpForm = ({ setStep }) => {
         if (isNaN(value)) return;
         const newOtp = [...otp];
         newOtp[index] = value;
-        console.log(index)
         setOtp(newOtp);
 
         if (value && index < otp.length - 1) {
@@ -48,30 +47,30 @@ const CheckOtpForm = ({ setStep }) => {
 
     };
 
-    useEffect(() => {
-        // Check if the browser supports OTP autofill
-        if ("OTPCredential" in window) {
-            window.navigator.credentials.get({
-                otp: { transport: ["sms"] }, // Request OTP from SMS
-                signal: new AbortController().signal, // Ensure proper cancellation
-            }).then((otpCredential) => {
-                if (otpCredential && otpCredential.code) {
-                    const receivedOtp = otpCredential.code.split(""); // Convert OTP string to array
-                    setOtp(receivedOtp);
-                    receivedOtp.forEach((num, index) => {
-                        if (inputRefs.current[index]) {
-                            inputRefs.current[index].value = num; // Autofill the inputs
-                        }
-                    });
-                }
-            }).catch((err) => console.error("OTP Auto-fill failed", err));
-        }
+    // useEffect(() => {
+    //     // Check if the browser supports OTP autofill
+    //     if ("OTPCredential" in window) {
+    //         window.navigator.credentials.get({
+    //             otp: { transport: ["sms"] }, // Request OTP from SMS
+    //             signal: new AbortController().signal, // Ensure proper cancellation
+    //         }).then((otpCredential) => {
+    //             if (otpCredential && otpCredential.code) {
+    //                 const receivedOtp = otpCredential.code.split(""); // Convert OTP string to array
+    //                 setOtp(receivedOtp);
+    //                 receivedOtp.forEach((num, index) => {
+    //                     if (inputRefs.current[index]) {
+    //                         inputRefs.current[index].value = num; // Autofill the inputs
+    //                     }
+    //                 });
+    //             }
+    //         }).catch((err) => console.error("OTP Auto-fill failed", err));
+    //     }
 
-        // Automatically focus the first input on component mount
-        if (inputRefs.current[0]) {
-            inputRefs.current[0].focus();
-        }
-    }, []);
+    //     // Automatically focus the first input on component mount
+    //     if (inputRefs.current[0]) {
+    //         inputRefs.current[0].focus();
+    //     }
+    // }, []);
     return (
         <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex justify-center items-center">
             <div className="w-[90%] max-w-[420px] bg-white flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">
@@ -88,6 +87,7 @@ const CheckOtpForm = ({ setStep }) => {
                             <input
                                 key={index}
                                 type="text"
+                                autocomplete="one-time-code"
                                 maxLength="1"
                                 className="w-[2.3rem] h-[2.3rem] sm:w-12 sm:h-12 text-center text-xl border rounded-md"
                                 value={digit}
@@ -96,7 +96,7 @@ const CheckOtpForm = ({ setStep }) => {
                             />
                         ))}
                     </div>
-                    <input type="hidden" name="otp" id="otp" value={otp.join("")} />
+                    <input type="hidden" name="otp" id="otp" value={otp.join("")}  autoComplete="one-time-code"/>
                     <SubmitBtn
                         title="تأیید"
                         style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`}

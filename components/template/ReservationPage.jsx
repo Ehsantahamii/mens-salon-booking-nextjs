@@ -12,7 +12,7 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { sendReserveTime } from "@/actions/ReserveActions";
 import ReservedContext from "@/context/ReservedContext";
 import Lottie from 'react-lottie-player';
@@ -33,7 +33,7 @@ const ReservationPage = (salonData) => {
     const [searchLoading, setSearchLoading] = useState(false);
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext)
-    const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
+    const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
 
     const handleServiceChange = async (event) => {
         const value = event.target.value;
@@ -117,9 +117,7 @@ const ReservationPage = (salonData) => {
             });
 
             setTime(response.data.data.times);
-            console.log(response)
         } catch (error) {
-            console.log(error)
 
             toast.error(error.message);
             setTime(null);
@@ -185,9 +183,9 @@ const ReservationPage = (salonData) => {
                 </div>
                 {
                     searchLoading ?
-                        <div class="text-center">
+                        <div className="text-center">
                             <div
-                                class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
+                                className="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
                             ></div>
                         </div>
 
@@ -214,7 +212,7 @@ const ReservationPage = (salonData) => {
                             می باشد.
                         </div>
                         <div className="flex justify-end items-center">
-                            <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
+                            <input type="hidden" name="time_id" id="time_id" defaultValue="1" value={selectedTime} />
                             <button
                                 className="hover:bg-liteGold  bg-semiLiteGold transition-colors  px-4 flex items-center justify-center py-1 shadow rounded-lg text-[14px] cursor-pointer"
                                 onClick={() => {
@@ -302,9 +300,8 @@ const ReservationPage = (salonData) => {
             </div>
             {
                 isLoading &&
-                <div class="text-center">
-                    <div
-                        class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
+                <div className="text-center">
+                    <div className="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
                     ></div>
                 </div>
 
@@ -312,8 +309,8 @@ const ReservationPage = (salonData) => {
 
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
-                    time?.map((data) => (
-                        <form action={formActionSendTime}>
+                    time?.map((data, index) => (
+                        <form action={formActionSendTime} key={index}>
                             <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
                             <button type="submit" disabled={data.reserved == true ? true : false || isLoading == true} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
                                 onClick={() => {

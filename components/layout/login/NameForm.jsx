@@ -4,7 +4,7 @@ import { sendUserName } from "@/actions/LoginActions";
 import SubmitBtn from "@/components/module/SubmitBtn";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
 import { useRouter } from 'next/navigation';
 
 import { IoIosCall } from "react-icons/io";
@@ -12,7 +12,7 @@ import { MdPerson } from "react-icons/md";
 import { toast } from "react-toastify";
 
 const NameForm = ({ setStep }) => {
-    const [stateUserName, formActionUserName] = useFormState(sendUserName, {});
+    const [stateUserName, formActionUserName] = useActionState(sendUserName, {});
     const [activeBtn, setActiveBtn] = useState(false);
 
     const router = useRouter()

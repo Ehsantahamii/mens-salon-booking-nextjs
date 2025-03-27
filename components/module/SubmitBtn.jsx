@@ -15,9 +15,9 @@ const SubmitBtn = ({ title, style, activeBtn, setDay }) => {
         >
             {
                 pending ?
-                    <div class="text-center" >
+                    <div className="text-center" >
                         <div
-                            class="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
+                            className="w-10 h-10 border-4 border-dashed rounded-full animate-spin border-liteGold mx-auto"
                         >
                         </div>
                     </div>

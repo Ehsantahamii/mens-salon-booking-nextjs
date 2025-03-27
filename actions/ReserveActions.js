@@ -20,7 +20,7 @@ export async function sendReserveData(stateCellphone, formData) {
       message: "لطفا یکی از خدمات دهندگان ارائه  شده را انتخاب کنید.",
     };
   }
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
   // if (!accessToken) {
   //   return {
   //     status: "error",
@@ -83,7 +83,7 @@ export async function sendReserveTime(stateCellphone, formData) {
       message: "لطفا یکی از محدوده های زمانی را جهت رزرو انتخاب کنید.",
     };
   }
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
   if (!accessToken) {
     return {
       status: "error",
@@ -122,7 +122,7 @@ export async function cancelReserved(stateCancelReserved, formData) {
       message: "نوبت رزرو شده ای جهت لغو شدن یافت نشد!",
     };
   }
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
   if (!accessToken) {
     return {
       status: "error",

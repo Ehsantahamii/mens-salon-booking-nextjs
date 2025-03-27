@@ -4,13 +4,14 @@ import { login } from "@/actions/LoginActions";
 import SubmitBtn from "@/components/module/SubmitBtn";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useFormState, useFormStatus } from "react-dom";
+import { useActionState } from "react";
+
 import { IoIosCall } from "react-icons/io";
 import { MdPerson } from "react-icons/md";
 import { toast } from "react-toastify";
 
 const LoginForm = ({ setStep }) => {
-    const [stateMobile, formActionMobile] = useFormState(login, {});
+    const [stateMobile, formActionMobile] = useActionState(login, {});
     const [activeBtn, setActiveBtn] = useState(false);
 
     function isBtnActive(e) {
@@ -43,7 +44,7 @@ const LoginForm = ({ setStep }) => {
                         <label htmlFor="mobile" className="text-[18px] font-normal py-2">
                             تلفن همراه خود را وارد نمایید.
                         </label>
-                        <input  required className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
+                        <input required className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
                             maxLength={11}
                             type="text" name="mobile" id="mobile" placeholder="09100000000" onChange={isBtnActive} />
                     </div>

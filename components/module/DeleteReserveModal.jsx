@@ -2,12 +2,11 @@
 
 import { cancelReserved } from "@/actions/ReserveActions";
 import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { toast } from "react-toastify";
 
 const DeleteReserveModal = ({ data, modal, setOpenModal }) => {
-    console.log(data)
-    const [stateCancelReserved, formActionCancelReserved] = useFormState(cancelReserved, {});
+    const [stateCancelReserved, formActionCancelReserved] = useActionState(cancelReserved, {});
     useEffect(() => {
         toast(stateCancelReserved?.data, { type: `${stateCancelReserved.status}` });
         if (stateCancelReserved.status === "success") {

@@ -5,14 +5,14 @@ import LoginForm from "@/components/layout/login/LoginForm";
 import NameForm from "@/components/layout/login/NameForm";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { useFormState } from "react-dom";
+import { useActionState } from "react";
 import { toast } from "react-toastify";
 
 const MainPage = () => {
     const [step, setStep] = useState(1);
-    const [stateReserveData, formActionReserveData] = useFormState(sendReserveData, {});
-    const [stateGetTimes, formActionGetTimes] = useFormState(getReserveTimes, {});
-    const [stateSendTime, formActionSendTime] = useFormState(sendReserveTime, {});
+    const [stateReserveData, formActionReserveData] = useActionState(sendReserveData, {});
+    const [stateGetTimes, formActionGetTimes] = useActionState(getReserveTimes, {});
+    const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
 
 
     const router = useRouter()

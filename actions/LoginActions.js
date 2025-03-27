@@ -25,7 +25,7 @@ export async function login(stateCellphone, formData) {
   const data = await postFetch("/api/v1/login", { mobile });
 
   if (data.status === "success") {
-    cookies().set({
+    (await cookies()).set({
       name: "login_token",
       value: data.data.token,
       httpOnly: true,
@@ -64,7 +64,7 @@ export async function checkOtp(stateOtp, formData) {
     };
   }
 
-  const loginToken = cookies().get("login_token");
+  const loginToken = (await cookies()).get("login_token");
   if (!loginToken) {
     return {
       status: "error",
@@ -77,8 +77,8 @@ export async function checkOtp(stateOtp, formData) {
     token: loginToken.value,
   });
   if (data.status === "success") {
-    cookies().delete("login_token");
-    cookies().set({
+    (await cookies()).delete("login_token");
+    (await cookies()).set({
       name: "access_token",
       value: data.data.token,
       httpOnly: true,
@@ -107,7 +107,7 @@ export async function sendUserName(stateName, formData) {
       message: "لطفا یک  نام معتبر وارد نمایید.",
     };
   }
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
   if (!accessToken) {
     return {
       status: "error",
@@ -138,7 +138,7 @@ export async function sendUserName(stateName, formData) {
 }
 
 export async function logout() {
-  const accessToken = cookies().get("access_token");
+  const accessToken = (await cookies()).get("access_token");
 
   if (!accessToken) {
     return {
@@ -155,7 +155,7 @@ export async function logout() {
   );
 
   if (data.status === "success") {
-    cookies().delete("login_token");
+    (await cookies()).delete("login_token");
     return {
       success: "با موفقیت خارج شدید.",
     };

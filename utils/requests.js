@@ -36,7 +36,7 @@ const postFetch = async (url, body, headers = {}) => {
   return await res.json();
 };
 const putFetch = async (url, body) => {
-  const token = cookies().get("login_token");
+  const token = (await cookies()).get("login_token");
   const res = await fetch(`https://api.developmart.ir${url}`, {
     cache: "no-store",
     method: "PUT",
@@ -51,7 +51,7 @@ const putFetch = async (url, body) => {
   return await res.json();
 };
 const deleteFetch = async (url) => {
-  const token = cookies().get("login_token");
+  const token = (await cookies()).get("login_token");
   const res = await fetch(`https://api.developmart.ir${url}`, {
     cache: "no-store",
     method: "DELETE",
