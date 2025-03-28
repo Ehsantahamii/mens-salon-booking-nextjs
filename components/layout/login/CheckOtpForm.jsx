@@ -1,12 +1,11 @@
 "use client"
 import { checkOtp } from '@/actions/LoginActions';
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useActionState } from "react";
 import { toast } from "react-toastify";
 import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
-import ReservedContext from '@/context/ReservedContext';
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [activeBtn, setActiveBtn] = useState(false);

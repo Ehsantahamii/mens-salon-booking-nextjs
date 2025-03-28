@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/accordion"
 const GuidBox = () => {
     return (
-        <>
+        <div className="pb-8">
             <Accordion type="single" collapsible dir="rtl" className="w-[95%] max-w-[640px] mx-auto">
                 <AccordionItem value="item-1">
                     <AccordionTrigger>
@@ -132,7 +132,7 @@ const GuidBox = () => {
                 </AccordionItem>
             </Accordion>
 
-        </>
+        </div>
     );
 };
 

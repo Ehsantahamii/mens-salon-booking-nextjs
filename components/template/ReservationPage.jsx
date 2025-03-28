@@ -151,10 +151,14 @@ const ReservationPage = (salonData) => {
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-12">
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
                         <label htmlFor="service_id">
-                            خدمات مورد نظر خود را انتخاب کنید*
+                            خدمات مورد نظر خود را انتخاب کنید
+                            <span className="text-liteGold">
+                                *
+                            </span>
+
                         </label>
 
-                        <select name="service_id" id="service_id" className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
+                        <select name="service_id" id="service_id" className="rounded shadow cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
                             onChange={handleServiceChange}
                         >
                             <option value="">انتخاب کنید ...</option>
@@ -167,15 +171,18 @@ const ReservationPage = (salonData) => {
                     </div>
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
                         <label htmlFor="provider_id">
-                            اجرا کننده خدمات را انتخاب کنید*
+                            اجرا کننده خدمات را انتخاب کنید
+                            <span className="text-liteGold">
+                                *
+                            </span>
                         </label>
-                        <select name="provider_id" id="provider_id" disabled={!providers} className="border-b-textColor cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
+                        <select name="provider_id" id="provider_id" disabled={!providers} className="rounded shadow cursor-pointer transition-all focus:transition-all p-2 border-b-[1px]"
                             onChange={(e) => setProviderId(e.target.value)}
                         >
                             <option value="">انتخاب کنید ...</option>
                             {
                                 providers?.map((item) => {
-                                    return <option className="cursor-pointer px-2" key={item.id} value={+item.id}>{item.name}</option>
+                                    return <option className=" rounded shadow cursor-pointer px-2" key={item.id} value={+item.id}>{item.name}</option>
                                 })
                             }
                         </select>

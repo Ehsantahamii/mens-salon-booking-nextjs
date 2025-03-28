@@ -39,13 +39,16 @@ const NameForm = ({ setStep }) => {
             <div className="w-[85%] bg-white flex flex-col justify-between pt-12 px-4 max-w-[380px] min-h-[180px] shadow rounded-xl ">
                 <form className="w-[85%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionUserName}>
                     <div className="flex flex-col w-full relative">
-                        <MdPerson className="absolute left-4 bottom-[0.8rem] opacity-50" />
+                        <MdPerson className="absolute left-4 bottom-[2rem] opacity-50" />
                         <label htmlFor="mobile" className="text-[18px] font-normal pb-2">
                             نام و نام خانوادگی خود را وارد نمایید.
                         </label>
                         <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
                             maxLength={11}
                             type="text" name="name" id="name" placeholder="نام و نام خانوادگی" onChange={isBtnActive} />
+                        <p className="text-[10px] pt-1 pr-1 opacity-70">
+                            ثبت نوبت شما براساس نام و نام خانوادگی وارد شده انجام می گیرد.
+                        </p>
                     </div>
                     <SubmitBtn title="ارسال" activeBtn={activeBtn} style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`} />
                 </form>
