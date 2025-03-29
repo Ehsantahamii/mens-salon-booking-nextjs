@@ -38,6 +38,8 @@ const ReservationPage = (salonData) => {
     const handleServiceChange = async (event) => {
         const value = event.target.value;
         setServiceId(value);
+        setDay(null);
+        setFirstFreeDate({})
         setIsLoading(true);
         if (value === "" || value === "0") {
             setProviders(null);
@@ -209,7 +211,7 @@ const ReservationPage = (salonData) => {
                     empty == false && day.length == 0 && <p>نوبتی جهت انتخاب یافت نشد.</p>
                 }
                 {
-                    firstFreeDate.day &&
+                    firstFreeDate?.day &&
                     <form action={formActionSendTime} className=" flex justify-between rounded-lg shadow items-center  my-2 py-1 px-2 text-[14px]">
                         <div>
                             اولین نوبت خالی برای شما برابربا
@@ -283,11 +285,6 @@ const ReservationPage = (salonData) => {
                                                     {item.day}
                                                 </h4>
 
-                                                {/* <span className={`${item.date === firstFreeDate?.date ? "bg-green-50 rounded-lg border border-dashed border-green-600 mt-1 py-1 px-2 text-[12px]" : ""}`}>
-                                                    {
-                                                        item.date === firstFreeDate?.date ? "اولین نوبت خالی" : "-"
-                                                    }
-                                                </span> */}
                                             </button>
                                         </form>
 

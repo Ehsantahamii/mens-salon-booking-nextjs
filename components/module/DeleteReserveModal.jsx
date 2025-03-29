@@ -1,19 +1,20 @@
 "use client"
 
 import { cancelReserved } from "@/actions/ReserveActions";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useActionState } from "react";
 import { toast } from "react-toastify";
 
-const DeleteReserveModal = ({ data, modal, setOpenModal }) => {
+const DeleteReserveModal = ({ data, setOpenModal, selectedTimeId }) => {
     const [stateCancelReserved, formActionCancelReserved] = useActionState(cancelReserved, {});
+    console.log(stateCancelReserved)
     useEffect(() => {
+        toast.dismiss();
         toast(stateCancelReserved?.data, { type: `${stateCancelReserved.status}` });
         if (stateCancelReserved.status === "success") {
             toast(stateCancelReserved?.message, { type: `${stateCancelReserved.status}` });
-            toast("ok");
         }
-    },[stateCancelReserved]);
+    }, [stateCancelReserved]);
 
     return (
         <div className="modal-1 fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50">
@@ -30,10 +31,12 @@ const DeleteReserveModal = ({ data, modal, setOpenModal }) => {
 
                 </h3>
                 <form action={formActionCancelReserved}>
-                    <input type="hidden" name="time_id" id="time_id" value={data.time_id} />
+                    <input type="hidden" name="time_id" id="time_id" value={selectedTimeId} />
                     <button type="submit"
                         className="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-1.5 text-center me-2 mb-2 dark:border-red-500 dark:text-red-500 dark:hover:text-white dark:hover:bg-red-600 dark:focus:ring-red-900"
-                    >بله</button>
+                    >
+                        بله
+                    </button>
                 </form>
             </div>
         </div >

@@ -115,7 +115,7 @@ export async function sendReserveTime(stateCellphone, formData) {
 }
 export async function cancelReserved(stateCancelReserved, formData) {
   const time_id = formData.get("time_id");
-
+  console.log(time_id);
   if (time_id === "") {
     return {
       status: "error",
@@ -143,6 +143,7 @@ export async function cancelReserved(stateCancelReserved, formData) {
     return {
       status: data.status,
       message: data.message,
+      data:stateCancelReserved
     };
   } else {
     return {

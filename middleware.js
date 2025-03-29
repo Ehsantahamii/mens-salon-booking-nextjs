@@ -7,7 +7,6 @@ export function middleware(req) {
   const accessToken = req.cookies.get("access_token");
 
   if (!accessToken) {
-    toast.error("حساب کاربری شما منقضی شده است.");
     return NextResponse.redirect(new URL("/", req.url));
   }
 }
