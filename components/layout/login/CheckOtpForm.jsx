@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
+import ResendOtpBtn from './ResendOtpBtn';
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [activeBtn, setActiveBtn] = useState(false);
@@ -95,13 +96,14 @@ const CheckOtpForm = ({ setStep }) => {
                             />
                         ))}
                     </div>
-                    <input type="hidden" name="otp" id="otp" value={otp.join("")}  autoComplete="one-time-code"/>
+                    <input type="hidden" name="otp" id="otp" value={otp.join("")} autoComplete="one-time-code" />
                     <SubmitBtn
                         title="تأیید"
                         style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`}
                     />
 
                 </form>
+                    <ResendOtpBtn />
             </div>
         </section>
 

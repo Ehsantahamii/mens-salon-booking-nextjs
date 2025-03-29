@@ -9,7 +9,7 @@ import { useActionState } from "react";
 import { toast } from "react-toastify";
 
 const MainPage = () => {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(2);
     const [stateReserveData, formActionReserveData] = useActionState(sendReserveData, {});
     const [stateGetTimes, formActionGetTimes] = useActionState(getReserveTimes, {});
     const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});

@@ -165,3 +165,38 @@ export async function logout() {
     };
   }
 }
+export async function resendOtp(stateOtp, formData) {
+  const loginToken = (await cookies()).get("login_token");
+  if (!loginToken) {
+    return {
+      status: "error",
+      message: "خطایی رخ داده است، دوباره تلاش کنید.",
+    };
+  }
+
+  const data = await postFetch("/api/v1/resend", {
+    token: loginToken.value,
+  });
+  console.log(data)
+  if (data.status === "success") {
+    (await cookies()).delete("login_token");
+    (await cookies()).set({
+      name: "login_token",
+      value: data.data.token,
+      httpOnly: true,
+      maxAge: 1 * 60 * 24 * 7, // One day
+      path: "/",
+    });
+
+    return {
+      status: data.status,
+      message: data.message,
+      data: data.data.name,
+    };
+  } else {
+    return {
+      status: data.status,
+      message: data.message,
+    };
+  }
+}
