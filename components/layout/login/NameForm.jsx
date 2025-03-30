@@ -46,7 +46,7 @@ const NameForm = ({ setStep }) => {
             <div className="w-[85%] bg-white flex flex-col justify-between pt-12 px-4 max-w-[380px] min-h-[180px] shadow rounded-xl ">
                 <form className="w-[85%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionUserName}>
                     <div className="flex flex-col w-full relative">
-                        <MdPerson className="absolute left-4 bottom-[2rem] opacity-50" />
+                        <MdPerson className="absolute left-4 bottom-[3rem] min-[340px]:bottom-[2rem] opacity-50" />
                         <label htmlFor="mobile" className="text-[18px] font-normal pb-2">
                             نام و نام خانوادگی خود را وارد نمایید.
                         </label>

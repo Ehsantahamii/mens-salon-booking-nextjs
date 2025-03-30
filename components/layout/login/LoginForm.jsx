@@ -46,6 +46,7 @@ const LoginForm = ({ setStep }) => {
                         </label>
                         <input required className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
                             maxLength={11}
+                            inputMode="numeric"
                             type="text" name="mobile" id="mobile" placeholder="09100000000" onChange={isBtnActive} />
                     </div>
                     <SubmitBtn title="ارسال کد تایید" activeBtn={activeBtn} style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`} />

@@ -53,6 +53,11 @@ const CheckOtpForm = ({ setStep }) => {
         }
 
     };
+    const handleKeyDown = (index, event) => {
+        if (event.key === "Backspace" && !otp[index] && index > 0) {
+          inputRefs.current[index - 1].focus();
+        }
+      };
 
     // useEffect(() => {
     //     // Check if the browser supports OTP autofill
@@ -96,9 +101,11 @@ const CheckOtpForm = ({ setStep }) => {
                                 type="text"
                                 autoComplete="one-time-code"
                                 maxLength="1"
+                                inputMode="numeric"
                                 className="w-[2.3rem] h-[2.3rem] sm:w-12 sm:h-12 text-center text-xl border rounded-md"
                                 value={digit}
                                 onChange={(e) => handleChange(index, e.target.value)}
+                                onKeyDown={(e) => handleKeyDown(index, e)}
                                 ref={(el) => (inputRefs.current[index] = el)}
                             />
                         ))}
