@@ -3,19 +3,22 @@
 import { sendUserName } from "@/actions/LoginActions";
 import SubmitBtn from "@/components/module/SubmitBtn";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useRouter } from 'next/navigation';
 
 import { IoIosCall } from "react-icons/io";
 import { MdPerson } from "react-icons/md";
 import { toast } from "react-toastify";
+import UserInfoContext from '@/context/UserInfoContext';
 
 const NameForm = ({ setStep }) => {
     const [stateUserName, formActionUserName] = useActionState(sendUserName, {});
     const [activeBtn, setActiveBtn] = useState(false);
 
     const router = useRouter()
+    const { saveUserData } = useContext(UserInfoContext)
+
 
     function isBtnActive(e) {
         const change = e.target.value
@@ -30,7 +33,11 @@ const NameForm = ({ setStep }) => {
     useEffect(() => {
         toast(stateUserName?.message, { type: `${stateUserName.status}` });
         if (stateUserName.status === "success") {
+            saveUserData(stateUserName?.data);
+            localStorage.setItem("user", JSON.stringify(stateUserName?.data));
             router.push("/reservation");
+            toast.success(`سلام ${stateUserName?.data}خوش آمدید.`)
+
 
         }
     });
@@ -44,7 +51,7 @@ const NameForm = ({ setStep }) => {
                             نام و نام خانوادگی خود را وارد نمایید.
                         </label>
                         <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
-                            maxLength={11}
+                            maxLength={20}
                             type="text" name="name" id="name" placeholder="نام و نام خانوادگی" onChange={isBtnActive} />
                         <p className="text-[10px] pt-1 pr-1 opacity-70">
                             ثبت نوبت شما براساس نام و نام خانوادگی وارد شده انجام می گیرد.

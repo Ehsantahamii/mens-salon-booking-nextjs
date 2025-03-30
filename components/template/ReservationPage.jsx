@@ -95,8 +95,11 @@ const ReservationPage = (salonData) => {
             setDay(response.data.data.days);
             setFirstFreeDate(response.data.data.first_free_time);
         } catch (error) {
-            toast.error(error.message);
-            toast.error("خطایی در ارسال درخواست رخ داد");
+            if (error.message === "Request failed with status code 400") {
+                toast.error("نوبتی جهت رزرو توسط خدمات دهنده ثبت نشده است.")
+            } else {
+                toast.error(error.message)
+            }
             setDay(null);
             setTime(null)
 
@@ -141,7 +144,7 @@ const ReservationPage = (salonData) => {
             }, 3000)
         }
         if (stateSendTime.status === "success") {
-            saveReservedData(stateSendTime.data);
+            saveReservedData(stateSendTime?.data);
             router.push("/result")
         }
 
@@ -212,7 +215,7 @@ const ReservationPage = (salonData) => {
                 }
                 {
                     firstFreeDate?.day &&
-                    <form action={formActionSendTime} className=" flex justify-between rounded-lg shadow items-center  my-2 py-1 px-2 text-[14px]">
+                    <form action={formActionSendTime} className=" flex flex-col md:flex-row justify-between rounded-lg shadow items-center text-center md:text-right  my-2 py-2 w-[95vw] max-w-[340px] md:max-w-full mx-auto px-2 text-[14px]">
                         <div>
                             اولین نوبت خالی برای شما برابربا
                             {firstFreeDate?.day}
@@ -232,7 +235,7 @@ const ReservationPage = (salonData) => {
                                 disabled={isLoading}
                             >
 
-                                رزرو
+                                رزرو کنید
                             </button>
                         </div>
                     </form>

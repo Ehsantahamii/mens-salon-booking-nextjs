@@ -1,12 +1,14 @@
 "use client"
 import { checkOtp } from '@/actions/LoginActions';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { useActionState } from "react";
 import { toast } from "react-toastify";
 import SubmitBtn from '@/components/module/SubmitBtn';
 import { FaArrowCircleLeft } from "react-icons/fa";
 import { useRouter } from 'next/navigation';
 import ResendOtpBtn from './ResendOtpBtn';
+import UserInfoContext from '@/context/UserInfoContext';
+
 const CheckOtpForm = ({ setStep }) => {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [activeBtn, setActiveBtn] = useState(false);
@@ -15,18 +17,23 @@ const CheckOtpForm = ({ setStep }) => {
     const [stateOtp, formActionOtp] = useActionState(checkOtp, {});
 
     const router = useRouter()
+    const { saveUserData } = useContext(UserInfoContext)
 
     useEffect(() => {
-        toast(stateOtp?.message, { type: `${stateOtp.status}` });
 
-        if (stateOtp?.status === "success" && stateOtp?.data == 1) {
+        if (stateOtp?.status === "success" && stateOtp?.data !== 0) {
+            saveUserData(stateOtp?.data);
+            localStorage.setItem("user", JSON.stringify(stateOtp?.data));
+            toast.success(`سلام ${stateOtp?.data}خوش آمدید.`)
             router.push("/reservation");
 
         } else if (stateOtp?.data == 0) {
             setStep(3)
+        } else if (stateOtp?.status === "error") {
+            toast(stateOtp?.message, { type: `${stateOtp.status}` });
         }
 
-    });
+    }, [stateOtp]);
 
 
     const handleChange = (index, value) => {
@@ -103,7 +110,7 @@ const CheckOtpForm = ({ setStep }) => {
                     />
 
                 </form>
-                    <ResendOtpBtn />
+                <ResendOtpBtn />
             </div>
         </section>
 

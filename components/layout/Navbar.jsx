@@ -1,25 +1,21 @@
 "use client"
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'
+import AvatarPopover from '../module/AvatarPopover';
 
 const Navbar = () => {
-    const pathname = usePathname();
     const renderNavBtn = () => {
         if (pathname === "/") {
             return null;
 
         } else if (pathname === "/reserved-list") {
             return (
-                <Link className='px-4 py-3 bg-liteGold rounded-md ' href="/reservation" >
-                    رزرو نوبت
-                </Link>
+                <AvatarPopover />
             );
 
         } else {
             return (
-                <Link className='px-4 py-3 bg-liteGold rounded-md ' href="/reserved-list" >
-                    نوبت های من
-                </Link>
+                <AvatarPopover />
+
             );
         }
     }
@@ -30,10 +26,7 @@ const Navbar = () => {
                     LOGO
                 </div>
                 <div className='w-[50%] lg:w-[30%] flex justify-end'>
-
-                    {
-                        renderNavBtn()
-                    }
+                    <AvatarPopover />
                 </div>
             </div>
         </nav>
