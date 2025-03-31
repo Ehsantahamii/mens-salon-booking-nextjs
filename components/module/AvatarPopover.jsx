@@ -19,29 +19,30 @@ const AvatarPopover = () => {
     return (
         <Popover className="user-popup">
             <PopoverTrigger asChild >
-                <button className="px-4 py-3 bg-liteGold rounded-md">
-                    حساب کاربری
-                </button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto max-w-[220px] min-w-[150px] p-2">
-                <div className="w-full">
-                    <div className="flex justify-between  gap-1 items-stretch py-2 border-b-[#030303] border-b text-[18px]">
-                        <Image width={100} height={100} className='w-[25px] h-[25px]' src="/images/avatar.png" alt="avatar" />
-                        <p className="overflow-x-hidden text-nowrap w-[75%]">
+
+                <button className="user-btn relative cursor-pointer py-2 text-[1em]">
+                    <span className="no-select w-full flex items-center gap-1 ">
+                        <Image width={100} height={100} className='w-[28px] h-[28px]' src="/images/avatar.png" alt="avatar" />
+                        <p className=" overflow-x-hidden text-nowrap w-[85%]">
                             {
                                 userData ? userData : "کاربر نامشخص"
                             }
                         </p>
-                    </div>
-                    <div className="w-full pt-2 pb-1 opacity-75 hover:opacity-100 transition-opacity" >
+                    </span>
+                </button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto max-w-[280px] min-w-[180px] p-2">
+                <div className="w-full">
+                    <div className="w-full flex flex-col pt-2 pb-1 opacity-75 hover:opacity-100 transition-opacity" >
                         {
                             pathname !== "/reserved-list" && <Link href="/reserved-list" onClick={() => onOpenChange(false)}>نوبت های من</Link>
                         }
                         {
                             pathname !== "/reservation" && <Link href="/reservation" onClick={() => onOpenChange(false)}>رزرو نوبت جدید</Link>
                         }
+                        <Link href="/rules" onClick={() => onOpenChange(false)}>قوانین و مقررات</Link>
                     </div>
-                    <div className="w-full pt-2 pb-1 text-red-500 opacity-75 hover:opacity-100 transition-opacity" >
+                    <div className="w-full  pb-1 text-red-500 opacity-75 hover:opacity-100 transition-opacity" >
                         <LogoutBtn />
                     </div>
                 </div>

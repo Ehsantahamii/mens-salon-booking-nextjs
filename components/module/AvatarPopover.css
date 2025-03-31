@@ -1,3 +1,14 @@
-.user-popup .PopoverContent{
-    max-width: 150px !important;
+.user-btn span::after {
+  content: "";
+  border-bottom: solid 1px #333;
+  bottom: 0;
+  position: absolute;
+  width: 100% !important;
+  display: block;
+  margin-top: 0;
+  transform: scaleX(0);
+  transition: transform 250ms ease-in-out;
+}
+.user-btn span:hover:after {
+  transform: scaleX(1);
 }

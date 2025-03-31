@@ -24,7 +24,7 @@ const CheckOtpForm = ({ setStep }) => {
         if (stateOtp?.status === "success" && stateOtp?.data !== 0) {
             saveUserData(stateOtp?.data);
             localStorage.setItem("user", JSON.stringify(stateOtp?.data));
-            toast.success(`سلام ${stateOtp?.data}خوش آمدید.`)
+            toast.success(`سلام ${"" + stateOtp?.data + "-"}خوش آمدید.`)
             router.push("/reservation");
 
         } else if (stateOtp?.data == 0) {
@@ -55,9 +55,9 @@ const CheckOtpForm = ({ setStep }) => {
     };
     const handleKeyDown = (index, event) => {
         if (event.key === "Backspace" && !otp[index] && index > 0) {
-          inputRefs.current[index - 1].focus();
+            inputRefs.current[index - 1].focus();
         }
-      };
+    };
 
     // useEffect(() => {
     //     // Check if the browser supports OTP autofill

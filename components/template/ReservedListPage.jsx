@@ -55,11 +55,11 @@ const ReservedListPage = (data) => {
                             <div >
                                 <div>
                                     <button type="submit" disabled={data?.cancel === 0} className={`${data?.cancel === 0 ? "cursor-not-allowed" : "cursor-pointer"} transition-colors hover:transition-colors text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-red-300 dark:focus:ring-red-800  dark:shadow-red-800/80 font-medium rounded-lg text-sm px-2.5 py-1.5 text-center`}
-                                        onClick={() => openModal(data.time_id)}
+                                        onClick={() => openModal(data)}
                                     >حذف نوبت</button>
                                 </div>
                                 {
-                                    modal && <DeleteReserveModal data={data} selectedTimeId={selectedTimeId} setOpenModal={setOpenModal} />
+                                    modal && <DeleteReserveModal  selectedTimeId={selectedTimeId} setOpenModal={setOpenModal} />
                                 }
                             </div>
                         </div>

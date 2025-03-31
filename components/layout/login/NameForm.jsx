@@ -31,14 +31,13 @@ const NameForm = ({ setStep }) => {
 
     }
     useEffect(() => {
-        toast(stateUserName?.message, { type: `${stateUserName.status}` });
         if (stateUserName.status === "success") {
             saveUserData(stateUserName?.data);
             localStorage.setItem("user", JSON.stringify(stateUserName?.data));
             router.push("/reservation");
             toast.success(`سلام ${stateUserName?.data}خوش آمدید.`)
-
-
+        } else if (stateUserName.status === "error") {
+            toast(stateUserName?.message, { type: `${stateUserName.status}` });
         }
     });
     return (
