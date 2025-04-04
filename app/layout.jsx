@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import "./globals.css";
+import "./typography.css";
 import { ToastContainer } from "react-toastify";
 import { ReservedProvider } from "@/context/ReservedContext";
 import Navbar from "@/components/layout/Navbar";

@@ -1,12 +1,17 @@
 import "./Rules.css"
+export const metadata = {
+    title: 'قوانین و مقررات   ',
+    description: '...',
+}
+
 const page = () => {
     return (
         <section className="max-w-[1200px] mx-auto px-4 py-8 flex flex-col gap-4">
-            <h1 className="text-4xl">
+            <h1 >
                 قوانین و مقررات استفاده از سایت
             </h1>
             <ul className="w-full rule-1">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className=" font-bold mt-2 mb-2">
                     ثبت‌ نام و ایجاد حساب کاربری
                 </h2>
                 <li>
@@ -21,7 +26,7 @@ const page = () => {
                 </li>
             </ul>
             <ul className="w-full rule-2">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className="font-bold mt-2 mb-2">
                     رزرو، لغو و تغییر نوبت
                 </h2>
                 <li>
@@ -35,7 +40,7 @@ const page = () => {
                 </li>
             </ul>
             <ul className="w-full rule-3">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className="font-bold mt-2 mb-2">
                     حفظ حریم خصوصی و امنیت اطلاعات
                 </h2>
                 <li>
@@ -49,7 +54,7 @@ const page = () => {
                 </li>
             </ul>
             <ul className="w-full rule-4">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className=" font-bold mt-2 mb-2">
                     تخلفات و تعلیق حساب کاربری
                 </h2>
                 <li>
@@ -60,7 +65,7 @@ const page = () => {
                 </li>
             </ul>
             <ul className="w-full rule-5">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className=" font-bold mt-2 mb-2">
                     حل اختلافات و دعاوی حقوقی
                 </h2>
                 <li>
@@ -74,7 +79,7 @@ const page = () => {
                 </li>
             </ul>
             <ul className="w-full rule-6">
-                <h2 className="text-2xl font-bold mt-2 mb-2">
+                <h2 className=" font-bold mt-2 mb-2">
                     تغییرات و اصلاح مقررات
                 </h2>
                 <li>

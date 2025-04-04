@@ -6,6 +6,7 @@ import Lottie from 'react-lottie-player';
 import runFile from "../../lottie/Animation - 1741003650231.json";
 import Link from "next/link";
 
+
 const ResultPage = () => {
     const { reservedData } = useContext(ReservedContext);
     return (
@@ -62,7 +63,7 @@ const ResultPage = () => {
                             </div>
                         </div>
                         <div className="w-full flex justify-end">
-                            <Link className="text-[14px] font-light underline" href="/reserved-list">مشاهده</Link>
+                            <Link className="font-light underline" href="/reserved-list">مشاهده</Link>
                         </div>
                     </div>
                     : ""

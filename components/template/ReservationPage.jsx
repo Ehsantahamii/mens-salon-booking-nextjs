@@ -1,7 +1,6 @@
 "use client"
 import axios from "axios";
-import { useContext, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { toast } from "react-toastify";
 import { PiArrowCircleLeftFill, PiArrowCircleRightFill } from "react-icons/pi";
 
@@ -13,9 +12,7 @@ import { Navigation } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
-import { useActionState } from "react";
-import { sendReserveTime } from "@/actions/ReserveActions";
-import ReservedContext from "@/context/ReservedContext";
+import SetReserveModal from "../module/ReserveModal";
 const GuidBox = dynamic(() => import('../module/GuidBox'), { ssr: false })
 
 
@@ -25,15 +22,17 @@ const ReservationPage = (salonData) => {
     const [providers, setProviders] = useState();
     const [day, setDay] = useState([]);
     const [selectedDate, setSelectedDate] = useState();
+    console.log(selectedDate)
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
     const [firstFreeDate, setFirstFreeDate] = useState({});
     const [empty, isEmpty] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
-    const router = useRouter();
-    const { saveReservedData } = useContext(ReservedContext)
-    const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
+    const [doReserveData, setDoReserveData] = useState();
+    const [modal, setOpenModal] = useState(false);
+
+
 
     const handleServiceChange = async (event) => {
         const value = event.target.value;
@@ -133,22 +132,16 @@ const ReservationPage = (salonData) => {
             setIsLoading(false);
         }
     };
+    const handleDayClick = (data) => {
+        setSelectedDate(data)
+    };
 
-    useEffect(() => {
-        toast.dismiss();
-        toast(stateSendTime?.message, { type: `${stateSendTime.status}` });
 
-        if (stateSendTime.loginStatus === "no-login") {
-            setTimeout(() => {
-                router.push("/")
-            }, 3000)
-        }
-        if (stateSendTime.status === "success") {
-            saveReservedData(stateSendTime?.data);
-            router.push("/result")
-        }
+    const openModal = (data) => {
+        setDoReserveData(data);
+        setOpenModal(true);
+    };
 
-    }, [stateSendTime]);
 
     return (
         <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
@@ -215,8 +208,8 @@ const ReservationPage = (salonData) => {
                 }
                 {
                     firstFreeDate?.day &&
-                    <form action={formActionSendTime} className=" flex flex-col md:flex-row justify-between rounded-lg shadow items-center text-center md:text-right  my-2 py-2 w-[95vw] max-w-[340px] md:max-w-full mx-auto px-2 text-[14px]">
-                        <div>
+                    <div className=" flex flex-col md:flex-row justify-between rounded-lg shadow items-center text-center md:text-right  my-2 py-2 w-[95vw] max-w-[340px] md:max-w-full mx-auto px-2 text-[14px]">
+                        <div className="pb-2 sm:pb-0">
                             اولین نوبت خالی برای شما برابربا
                             {firstFreeDate?.day}
                             ساعت
@@ -228,17 +221,14 @@ const ReservationPage = (salonData) => {
                             <button
                                 className="hover:bg-liteGold  bg-semiLiteGold transition-colors  px-4 flex items-center justify-center py-1 shadow rounded-lg text-[14px] cursor-pointer"
                                 onClick={() => {
-                                    toast.loading("در حال ثبت نوبت شما ...");
-                                    setSelectedTime(firstFreeDate.time_id)
+                                    openModal(firstFreeDate)
                                 }}
                                 type="submit"
-                                disabled={isLoading}
-                            >
-
+                                disabled={isLoading}>
                                 رزرو کنید
                             </button>
                         </div>
-                    </form>
+                    </div>
                 }
 
                 {
@@ -275,12 +265,10 @@ const ReservationPage = (salonData) => {
 
                             {
                                 day?.map((item => (
-
-                                    <SwiperSlide className={`day-slide relative w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded-lg cursor-pointer before:content-[attr(before)]`} before={`${item.date === firstFreeDate?.date ? "اولین نوبت خالی" : ""}`} title={item.date} key={item.id}
-                                        onClick={() => { setSelectedDate(item.id) }}
-                                    >
+                                    <SwiperSlide className={`day-slide relative w-[200px] text-[#000] h-[100px] p-2 my-4 shadow rounded-lg cursor-pointer ${selectedDate == item.id ? "transition-all border-[2px] border-liteGold border-dashed" : "opacity-70"} `} title={item.date} key={item.id}
+                                        onClick={() => handleDayClick(item.id)} >
                                         <form onSubmit={handleGetHours} >
-                                            <button type="submit" disabled={isLoading} className={`w-full h-full `} onClick={() => { setSelectedDate(item.id) }}>
+                                            <button type="submit" disabled={isLoading} className={`w-full h-full `} onClick={() => handleDayClick(item.id)}>
                                                 <h3 className="font-medium">
                                                     {item.label}
                                                 </h3>
@@ -317,19 +305,22 @@ const ReservationPage = (salonData) => {
             <div className="flex flex-wrap justify-center gap-2 pt-6 pb-12 max-w-[640px] mx-auto ">
                 {
                     time?.map((data, index) => (
-                        <form action={formActionSendTime} key={index}>
-                            <input type="hidden" name="time_id" id="time_id" value={selectedTime} />
-                            <button type="submit" disabled={data.reserved == true ? true : false || isLoading == true} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg  ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 cursor-pointer"}`}
+                        <div key={index}>
+                            <button disabled={data.reserved == true ? true : false || isLoading == true} title={data.time} key={data.id} className={`px-2 py-1 rounded-lg transition-transform ${data.reserved == true ? "bg-neutral-400 cursor-not-allowed" : "bg-neutral-100 hover:translate-y-[-5px]  cursor-pointer"}`}
                                 onClick={() => {
-                                    toast.loading("در حال ثبت نوبت شما ...");
-                                    setSelectedTime(data.id)
+                                    openModal(data)
                                 }}
                             >
                                 {data.time}
                             </button>
-                        </form>
+                        </div>
                     ))
                 }
+                {
+                    modal && <SetReserveModal doReserveData={doReserveData} setOpenModal={setOpenModal} />
+
+                }
+
             </div>
             <GuidBox />
         </section >

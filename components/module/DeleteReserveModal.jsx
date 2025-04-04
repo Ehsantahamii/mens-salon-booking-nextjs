@@ -17,7 +17,7 @@ const DeleteReserveModal = ({ setOpenModal, selectedTimeId }) => {
     }, [stateCancelReserved]);
 
     return (
-        <div className="modal-1 fixed inset-0 flex  items-center justify-center bg-black bg-opacity-50">
+        <div className="modal-1 fixed inset-0 flex  items-center justify-center bg-black bg-opacity-70">
             <div className="w-[85vw] relative p-4 max-w-[420px] h-[150px] bg-white shadow rounded-lg ">
                 <img className="w-[32px] absolute top-[-7px] left-[-14px] hover:scale-105 transition-all cursor-pointer"
                     src="/images/cancel-close-svgrepo-com.svg"

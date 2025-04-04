@@ -37,11 +37,13 @@ export async function login(stateCellphone, formData) {
     return {
       status: data.status,
       data: data.data.otp,
+      message: data.message,
     };
   } else {
     return {
       status: data.status,
       data: data.data,
+      message: data.message,
     };
   }
 }

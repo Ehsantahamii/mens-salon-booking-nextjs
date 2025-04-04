@@ -13,10 +13,14 @@ const ReservedListPage = (data) => {
     };
     return (
         <div className="overflow-y-auto overflow-x-hidden flex flex-col justify-center  gap-4 py-4">
+
             {
                 data.data ?
                     data?.data?.data?.times?.map((data, index) => (
-                        <div className={`${data?.cancel === 0 ? "cursor-not-allowed grayscale bg-gray-200" : "bg-white"} w-[95%] mx-auto md:max-w-full flex-wrap justify-between text-black shadow bg-white py-8 px-6 rounded-xl flex  text-[1em] `} key={index}>
+                        <div className={`${data?.cancel === 0 ? "cursor-not-allowed grayscale bg-gray-200" : "bg-white"} w-[95%] mx-auto md:max-w-full relative flex-wrap justify-between text-black shadow bg-white py-8 px-6 rounded-xl flex  text-[1em] `} key={index}>
+                            {
+                                data?.cancel === 0 && <img className="absolute inset-0 m-auto  max-w-[100px] sm:max-w-[150px]" src="/images/monghazii.svg" alt="منقضی شده" />
+                            }
                             <div>
                                 <p >
                                     <span className="opacity-60">
@@ -58,9 +62,6 @@ const ReservedListPage = (data) => {
                                         onClick={() => openModal(data)}
                                     >حذف نوبت</button>
                                 </div>
-                                {
-                                    modal && <DeleteReserveModal  selectedTimeId={selectedTimeId} setOpenModal={setOpenModal} />
-                                }
                             </div>
                         </div>
 
@@ -71,6 +72,10 @@ const ReservedListPage = (data) => {
                     </p>)
 
             }
+            {
+                modal && <DeleteReserveModal selectedTimeId={selectedTimeId} setOpenModal={setOpenModal} />
+            }
+
         </ div>
     );
 };

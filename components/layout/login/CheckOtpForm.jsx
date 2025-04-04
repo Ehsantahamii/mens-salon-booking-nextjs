@@ -87,10 +87,10 @@ const CheckOtpForm = ({ setStep }) => {
         <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex justify-center items-center">
             <div className="w-[90%] max-w-[420px] bg-white flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">
                 <FaArrowCircleLeft color='#333' title='بازگشت' size={20} className='cursor-pointer absolute left-4 top-4' onClick={() => setStep(1)} />
-                <h2 className='text-[26px]'>
+                <h2 className=''>
                     کد تایید را وارد نمایید
                 </h2>
-                <h3 className='text-[16px] text-[#333] font-thin py-4'>
+                <h3 className=' text-[#333] font-thin py-4'>
                     کد ارسال شده را وارد نمایید
                 </h3>
                 <form className="w-[90%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionOtp}>
