@@ -1,7 +1,6 @@
 "use client"
 
 import { resendOtp } from "@/actions/LoginActions";
-import SubmitBtn from "@/components/module/SubmitBtn";
 import { useEffect, useState } from "react";
 import { useActionState } from "react";
 import { toast } from "react-toastify";
@@ -9,14 +8,15 @@ import { toast } from "react-toastify";
 const ResendOtpBtn = () => {
     const [minutes, setMinutes] = useState(2);
     const [seconds, setSeconds] = useState(1);
-    const [isDisabled, setIsDisabled] = useState(true);
-    const [stateResendOtp, formActionResendOtp] = useActionState(resendOtp, {});
+    const [stateResendOtp, formActionResendOtp, isPending] = useActionState(resendOtp, {});
 
     useEffect(() => {
         toast(stateResendOtp?.data, { type: `${stateResendOtp.status}` });
         if (stateResendOtp?.status === 'success') {
             setMinutes(2);
             setSeconds(1);
+            toast.success("کد ورود مجدداً ارسال شد.")
+
         }
 
     }, [stateResendOtp]);
@@ -43,7 +43,7 @@ const ResendOtpBtn = () => {
     }, [seconds]);
 
     return (
-        <div className="flex justify-start pt-1 opacity-60">
+        <div className="flex justify-start pt-2 opacity-60">
             {
                 seconds > 0 || minutes > 0 ?
                     (
@@ -55,7 +55,12 @@ const ResendOtpBtn = () => {
                     :
                     (
                         <form action={formActionResendOtp} >
-                            <button type="submit" className="text-[11px] opacity-60 hover:opacity-100"> ارسال مجدد کد ...</button>
+                            {
+                                isPending ? (<p className="text-[12px]">در حال ارسال مجدد کد ...</p>) :
+                                    (
+                                        <button type="submit" className="text-[12px] opacity-70 hover:opacity-100"> ارسال مجدد کد ...</button>
+                                    )
+                            }
                         </form >
                     )
             }

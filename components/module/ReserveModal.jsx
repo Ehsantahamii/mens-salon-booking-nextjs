@@ -11,9 +11,6 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
     const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext)
-
-
-    console.log(doReserveData, stateSendTime)
     useEffect(() => {
         toast.dismiss();
         toast(stateSendTime?.message, { type: `${stateSendTime.status}` });

@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
-import { toast } from "react-toastify";
 
 // to check user is login
 export function middleware(req) {
@@ -8,7 +7,7 @@ export function middleware(req) {
 
   if (!accessToken) {
     return NextResponse.redirect(new URL("/", req.url));
-  }
+  } 
 }
 
 export const config = {

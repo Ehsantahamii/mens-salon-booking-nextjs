@@ -7,7 +7,6 @@ import { useEffect, useState } from "react";
 import { useActionState } from "react";
 
 import { IoIosCall } from "react-icons/io";
-import { MdPerson } from "react-icons/md";
 import { toast } from "react-toastify";
 
 const LoginForm = ({ setStep }) => {
@@ -20,15 +19,16 @@ const LoginForm = ({ setStep }) => {
             setActiveBtn(true);
         } else {
             setActiveBtn(false);
-
         }
-
     }
 
     useEffect(() => {
-        toast(stateMobile?.data, { type: `${stateMobile.status}` });
         if (stateMobile.status === "success") {
             setStep(2)
+            toast.success("کد ورود ارسال شد.")
+
+        } else if (stateMobile.status === "error") {
+            toast(stateMobile?.data, { type: `${stateMobile.status}` });
         }
     });
     return (

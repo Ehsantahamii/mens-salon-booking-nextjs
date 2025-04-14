@@ -40,6 +40,8 @@ select:focus-visible {
 .Toastify__toast {
   color: #333;
   font-weight: 500;
+  z-index: 9999999999 !important;
+
 }
 .loading-overlay {
   position: fixed;

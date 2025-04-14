@@ -13,6 +13,8 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import "./ReservationPage.css"
 import SetReserveModal from "../module/ReserveModal";
+import Developmart from "../module/Developmart";
+import api from "@/utils/axios";
 const GuidBox = dynamic(() => import('../module/GuidBox'), { ssr: false })
 
 
@@ -22,7 +24,6 @@ const ReservationPage = (salonData) => {
     const [providers, setProviders] = useState();
     const [day, setDay] = useState([]);
     const [selectedDate, setSelectedDate] = useState();
-    console.log(selectedDate)
     const [time, setTime] = useState([]);
     const [selectedTime, setSelectedTime] = useState();
     const [firstFreeDate, setFirstFreeDate] = useState({});
@@ -48,7 +49,7 @@ const ReservationPage = (salonData) => {
         }
 
         try {
-            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/services/users", {
+            const response = await api.post("/reservation/services/users", {
                 id: value,
             });
 
@@ -85,7 +86,7 @@ const ReservationPage = (salonData) => {
 
 
         try {
-            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/days", {
+            const response = await api.post("/reservation/days", {
                 service_id: serviceId,
                 provider_id: providerId,
 
@@ -113,7 +114,7 @@ const ReservationPage = (salonData) => {
         setIsLoading(true);
 
         try {
-            const response = await axios.post("https://admin.developmart.ir/api/v1/reservation/times", {
+            const response = await api.post("/reservation/times", {
                 day_id: selectedDate,
                 service_id: serviceId,
                 provider_id: providerId,
@@ -144,7 +145,7 @@ const ReservationPage = (salonData) => {
 
 
     return (
-        <section className="md:pt-[10%] pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
+        <section className="md:pt-[10%] relative pt-[25%] w-[98%] mx-auto max-w-[1440px] text-textColor">
             <form onSubmit={handleSearchBtn} className="flex max-w-[640px] flex-col gap-8  mx-auto py-8" encType="multipart/form-data">
                 <div className="w-full flex flex-col lg:flex-row lg:justify-between gap-12">
                     <div className="flex flex-col w-[85%] md:w-[48%] mx-auto">
@@ -323,6 +324,7 @@ const ReservationPage = (salonData) => {
 
             </div>
             <GuidBox />
+            <Developmart />
         </section >
     );
 };

@@ -1,4 +1,5 @@
 "use server";
+
 import { cookies } from "next/headers";
 import { getFetch, postFetch } from "@/utils/requests";
 import { revalidatePath } from "next/cache";
@@ -85,7 +86,8 @@ export async function checkOtp(stateOtp, formData) {
       name: "access_token",
       value: data.data.token,
       httpOnly: true,
-      maxAge: 1 * 60 * 24 * 7, // One day
+      secure: true,
+      maxAge: 60 * 60 * 24 * 7, // One week
       path: "/",
     });
 
@@ -185,14 +187,13 @@ export async function resendOtp(stateOtp, formData) {
   const data = await postFetch("/api/v1/resend", {
     token: loginToken.value,
   });
-  console.log(data);
   if (data.status === "success") {
     (await cookies()).delete("login_token");
     (await cookies()).set({
       name: "login_token",
       value: data.data.token,
       httpOnly: true,
-      maxAge: 1 * 60 * 24 * 7, // One day
+      maxAge: 60 * 60 * 24 * 7,
       path: "/",
     });
 

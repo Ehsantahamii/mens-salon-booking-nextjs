@@ -2,9 +2,10 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+const API_URL = "https://admin.developmart.ir";
 
 const getFetch = async (url, headers = {}) => {
-  const res = await fetch(`https://admin.developmart.ir${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     cache: "no-store",
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +23,7 @@ const getFetch = async (url, headers = {}) => {
 };
 
 const postFetch = async (url, body, headers = {}) => {
-  const res = await fetch(`https://admin.developmart.ir${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     cache: "no-store",
     method: "POST",
     headers: {
@@ -37,7 +38,7 @@ const postFetch = async (url, body, headers = {}) => {
 };
 const putFetch = async (url, body) => {
   const token = (await cookies()).get("login_token");
-  const res = await fetch(`https://api.developmart.ir${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     cache: "no-store",
     method: "PUT",
     headers: {
@@ -52,7 +53,7 @@ const putFetch = async (url, body) => {
 };
 const deleteFetch = async (url) => {
   const token = (await cookies()).get("login_token");
-  const res = await fetch(`https://api.developmart.ir${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     cache: "no-store",
     method: "DELETE",
     headers: {
@@ -65,58 +66,4 @@ const deleteFetch = async (url) => {
   return await res.json();
 };
 
-// const liaraFetch = async (url, headers = {}) => {
-//   const res = await fetch(`https://api.iran.liara.ir${url}`, {
-//     cache: "no-store",
-//     headers: {
-//       "Content-Type": "application/json",
-//       Accept: "application/json",
-//       ...headers,
-//     },
-//   });
-
-//   if (res.ok) {
-//     const data = await res.json();
-//     return data;
-//   } else {
-//     throw new Error(`مشکل در دریافت اطلاعات کد : ${res.status}`);
-//   }
-// };
-
-const linkFetch = async (url, headers = {}) => {
-  const res = await fetch(`https://api.developmart.ir${url}`, {
-    cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...headers,
-    },
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    return data;
-  } else {
-    throw new Error(res);
-  }
-};
-
-const getNavbar = async (url, headers = {}) => {
-  const res = await fetch(`https://admin.developmart.ir/api/v1${url}`, {
-    cache: "no-store",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      ...headers,
-    },
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    return data.data;
-  } else {
-    throw new Error(`مشکل در دریافت اطلاعات کد : ${res.status}`);
-  }
-};
-
-export { getFetch, postFetch, putFetch, deleteFetch, linkFetch, getNavbar };
+export { getFetch, postFetch, putFetch, deleteFetch };

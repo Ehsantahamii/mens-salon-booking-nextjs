@@ -7,12 +7,11 @@ import { useContext, useEffect, useState } from "react";
 import { useActionState } from "react";
 import { useRouter } from 'next/navigation';
 
-import { IoIosCall } from "react-icons/io";
 import { MdPerson } from "react-icons/md";
 import { toast } from "react-toastify";
 import UserInfoContext from '@/context/UserInfoContext';
 
-const NameForm = ({ setStep }) => {
+const NameForm = () => {
     const [stateUserName, formActionUserName] = useActionState(sendUserName, {});
     const [activeBtn, setActiveBtn] = useState(false);
 
@@ -26,7 +25,6 @@ const NameForm = ({ setStep }) => {
             setActiveBtn(true);
         } else {
             setActiveBtn(false);
-
         }
 
     }
@@ -35,11 +33,11 @@ const NameForm = ({ setStep }) => {
             saveUserData(stateUserName?.data);
             localStorage.setItem("user", JSON.stringify(stateUserName?.data));
             router.push("/reservation");
-            toast.success(`سلام ${stateUserName?.data}خوش آمدید.`)
+            toast.success(`سلام ${"" + stateUserName?.data + "-"}خوش آمدید.`)
         } else if (stateUserName.status === "error") {
             toast(stateUserName?.message, { type: `${stateUserName.status}` });
         }
-    });
+    }, [stateUserName]);
     return (
         <section className="w-[100dvw] h-[90vh] md:h-svh flex gap-8 justify-center items-center">
             <div className="w-[85%] bg-white flex flex-col justify-between pt-12 px-4 max-w-[380px] min-h-[180px] shadow rounded-xl ">
@@ -52,7 +50,7 @@ const NameForm = ({ setStep }) => {
                         <input className="w-full border-navColor bg-orange-50 rou border-[1px] max-w-[300px] py-2 px-4 rounded-xl"
                             maxLength={20}
                             type="text" name="name" id="name" placeholder="نام و نام خانوادگی" onChange={isBtnActive} />
-                        <p className="text-[10px] pt-1 pr-1 opacity-70">
+                        <p className="text-[11px] text-rose-600 pt-2 pr-1 opacity-70">
                             ثبت نوبت شما براساس نام و نام خانوادگی وارد شده انجام می گیرد.
                         </p>
                     </div>

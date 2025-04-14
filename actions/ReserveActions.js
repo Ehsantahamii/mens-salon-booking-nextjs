@@ -20,14 +20,6 @@ export async function sendReserveData(stateCellphone, formData) {
       message: "لطفا یکی از خدمات دهندگان ارائه  شده را انتخاب کنید.",
     };
   }
-  const accessToken = (await cookies()).get("access_token");
-  // if (!accessToken) {
-  //   return {
-  //     status: "error",
-  //     loginStatus: false,
-  //     message: "ابتدا وارد شوید.",
-  //   };
-  // }
 
   const data = await postFetch("/api/v1/reservation/days", {
     service_id,
@@ -115,7 +107,6 @@ export async function sendReserveTime(stateCellphone, formData) {
 }
 export async function cancelReserved(stateCancelReserved, formData) {
   const time_id = formData.get("time_id");
-  console.log(time_id);
   if (time_id === "") {
     return {
       status: "error",

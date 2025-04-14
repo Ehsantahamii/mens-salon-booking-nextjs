@@ -10,7 +10,7 @@ import Link from "next/link";
 const ResultPage = () => {
     const { reservedData } = useContext(ReservedContext);
     return (
-        <section className="w-[100vw] h-screen flex items-center justify-center">
+        <section className="w-[100vw] h-screen  relative flex items-center justify-center">
             {
                 reservedData ?
                     <div className="w-[85%] bg-white max-w-[320px] shadow-md rounded-lg px-6 py-8">
