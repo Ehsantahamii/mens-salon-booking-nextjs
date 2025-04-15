@@ -59,30 +59,6 @@ const CheckOtpForm = ({ setStep }) => {
         }
     };
 
-    // useEffect(() => {
-    //     // Check if the browser supports OTP autofill
-    //     if ("OTPCredential" in window) {
-    //         window.navigator.credentials.get({
-    //             otp: { transport: ["sms"] }, // Request OTP from SMS
-    //             signal: new AbortController().signal, // Ensure proper cancellation
-    //         }).then((otpCredential) => {
-    //             if (otpCredential && otpCredential.code) {
-    //                 const receivedOtp = otpCredential.code.split(""); // Convert OTP string to array
-    //                 setOtp(receivedOtp);
-    //                 receivedOtp.forEach((num, index) => {
-    //                     if (inputRefs.current[index]) {
-    //                         inputRefs.current[index].value = num; // Autofill the inputs
-    //                     }
-    //                 });
-    //             }
-    //         }).catch((err) => console.error("OTP Auto-fill failed", err));
-    //     }
-
-    //     // Automatically focus the first input on component mount
-    //     if (inputRefs.current[0]) {
-    //         inputRefs.current[0].focus();
-    //     }
-    // }, []);
     return (
         <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex justify-center items-center">
             <div className="w-[90%] max-w-[420px] bg-white flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">

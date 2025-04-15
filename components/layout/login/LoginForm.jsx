@@ -25,7 +25,9 @@ const LoginForm = ({ setStep }) => {
     useEffect(() => {
         if (stateMobile.status === "success") {
             setStep(2)
-            toast.success("کد ورود ارسال شد.")
+            // toast.success("کد ورود ارسال شد.")
+            toast(stateMobile?.data, { type: `${stateMobile.status}` });
+            
 
         } else if (stateMobile.status === "error") {
             toast(stateMobile?.data, { type: `${stateMobile.status}` });

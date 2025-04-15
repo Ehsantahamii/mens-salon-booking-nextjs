@@ -2,7 +2,7 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-const API_URL = "https://admin.developmart.ir";
+const API_URL = "https://panel.developmart.ir";
 
 const getFetch = async (url, headers = {}) => {
   const res = await fetch(`${API_URL}${url}`, {
