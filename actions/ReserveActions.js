@@ -21,7 +21,7 @@ export async function sendReserveData(stateCellphone, formData) {
     };
   }
 
-  const data = await postFetch("/api/v1/reservation/days", {
+  const data = await postFetch("/reservation/days", {
     service_id,
     provider_id,
   });
@@ -48,7 +48,7 @@ export async function getReserveTimes(stateCellphone, formData) {
       message: "لطفا یکی از روزهای هفته را انتخاب کنید.",
     };
   }
-  const data = await postFetch("/api/v1/reservation/times", {
+  const data = await postFetch("/reservation/times", {
     day_id,
     service_id,
     provider_id,
@@ -66,16 +66,20 @@ export async function getReserveTimes(stateCellphone, formData) {
     };
   }
 }
-export async function sendReserveTime(stateCellphone, formData) {
+export async function sendReserveTime(prevState, formData) {
   const id = formData.get("time_id");
+  console.log("iddd", id);
 
-  if (id === "") {
+  if (!id || id === "") {
     return {
       status: "error",
       message: "لطفا یکی از محدوده های زمانی را جهت رزرو انتخاب کنید.",
     };
   }
-  const accessToken = (await cookies()).get("access_token");
+
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("access_token");
+
   if (!accessToken) {
     return {
       status: "error",
@@ -84,24 +88,33 @@ export async function sendReserveTime(stateCellphone, formData) {
     };
   }
 
-  const data = await postFetch(
-    "/api/v1/reservation/book",
-    { id },
-    {
-      Authorization: `Bearer ${accessToken.value}`,
+  try {
+    const data = await postFetch(
+      "/reservation/book",
+      { id },
+      {
+        Authorization: `Bearer ${accessToken?.value}`,
+      }
+    );
+
+    if (data.status === "success") {
+      revalidateTag("book");
+      return {
+        status: data.status,
+        data: data.data,
+        message: data.message,
+      };
+    } else {
+      return {
+        status: data.status,
+        message: data.message,
+      };
     }
-  );
-  if (data.status === "success") {
-    revalidateTag("book");
+  } catch (error) {
+    console.error("Reserve error:", error);
     return {
-      status: data.status,
-      data: data.data,
-      message: data.message,
-    };
-  } else {
-    return {
-      status: data.status,
-      message: data.message,
+      status: "error",
+      message: "خطا در ثبت رزرو. لطفا مجددا تلاش کنید.",
     };
   }
 }
@@ -123,7 +136,7 @@ export async function cancelReserved(stateCancelReserved, formData) {
   }
 
   const data = await postFetch(
-    "/api/v1/user/cancel-reservation",
+    "/user/cancel-reservation",
     { time_id },
     {
       Authorization: `Bearer ${accessToken.value}`,
@@ -134,7 +147,7 @@ export async function cancelReserved(stateCancelReserved, formData) {
     return {
       status: data.status,
       message: data.message,
-      data:stateCancelReserved
+      data: stateCancelReserved,
     };
   } else {
     return {

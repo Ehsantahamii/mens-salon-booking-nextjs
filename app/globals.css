@@ -28,10 +28,10 @@ body {
   overflow-x: hidden;
 }
 
-select:focus,
+/* select:focus,
 select:focus-visible {
   all: unset;
-}
+} */
 .bg-overlay {
   height: 100vh !important;
   filter: brightness(0.4) !important;
@@ -41,7 +41,6 @@ select:focus-visible {
   color: #333;
   font-weight: 500;
   z-index: 9999999999 !important;
-
 }
 .loading-overlay {
   position: fixed;
@@ -119,4 +118,32 @@ select:focus-visible {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.3s ease-out;
 }

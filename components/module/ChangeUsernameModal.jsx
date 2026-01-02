@@ -9,7 +9,6 @@ import { toast } from "react-toastify";
 
 const ChangeUsernameModal = ({ setOpenModal }) => {
     const [stateChangeUsername, formActionChangeUsername, isPending] = useActionState(sendUserName, {});
-    console.log(stateChangeUsername)
 
     const { saveUserData } = useContext(UserInfoContext)
 

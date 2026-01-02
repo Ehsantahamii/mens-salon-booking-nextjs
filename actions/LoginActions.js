@@ -5,143 +5,200 @@ import { getFetch, postFetch } from "@/utils/requests";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function login(stateCellphone, formData) {
+export async function loginAction(prevState, formData) {
   const mobile = formData.get("mobile");
 
-  if (mobile === "") {
+  if (!mobile || mobile.length !== 11) {
     return {
       status: "error",
-      message: "لطفا یک شماره تماس معتبر وارد نمایید.",
+      message: "شماره موبایل نامعتبر است",
     };
   }
 
   const pattern = /^(\+98|0)?9\d{9}$/i;
-
   if (!pattern.test(mobile)) {
     return {
       status: "error",
-      message: "لطفا یک شماره تماس معتبر وارد نمایید.",
+      message: "شماره موبایل نامعتبر است",
     };
   }
 
-  const data = await postFetch("/api/v1/login", { mobile });
-
-  if (data.status === "success") {
-    (await cookies()).set({
-      name: "login_token",
-      value: data.data.token,
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
-      path: "/",
+  try {
+    const res = await fetch(`${process.env.API_URL}/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ mobile }),
     });
 
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      return {
+        status: "error",
+        message: data.message || "خطا در ارسال کد تایید",
+      };
+    }
+    const cookieStore = cookies();
+    const accessToken = cookieStore.get("access_token");
+    if (accessToken) {
+      (await cookies()).delete("access_token");
+    }
+
+    if (data.data?.token) {
+      cookies().set({
+        name: "token",
+        value: data.data.token,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      });
+    }
+
     return {
-      status: data.status,
-      data: data.data.otp,
-      message: data.message,
+      status: "success",
+      message: data.message || "کد تایید با موفقیت ارسال شد",
+      otp: data?.data?.otp,
     };
-  } else {
+  } catch {
     return {
-      status: data.status,
-      data: data.data,
-      message: data.message,
+      status: "error",
+      message: "خطا در برقراری ارتباط با سرور",
     };
   }
 }
-
-export async function checkOtp(stateOtp, formData) {
+export async function checkOtpAction(prevState, formData) {
+  const cookieStore = cookies();
+  const loginToken = cookieStore.get("token"); // توکن مرحله OTP
   const otp = formData.get("otp");
 
-  if (otp === "") {
+  // ✅ validation
+  if (!otp || otp.length !== 6) {
     return {
       status: "error",
-      message: "کد ارسال شده را وارد نمایید.",
+      message: "کد تایید نامعتبر است",
     };
   }
 
-  const pattern = /^[0-9]{6}$/;
-
-  if (!pattern.test(otp)) {
+  // ✅ اگر token مرحله قبل وجود نداشت
+  if (!loginToken?.value) {
     return {
       status: "error",
-      message: "فورمت کد ارسالی نا معتبر است.",
+      message: "نشست منقضی شده است، مجدداً وارد شوید",
     };
   }
 
-  const loginToken = (await cookies()).get("login_token");
-  if (!loginToken) {
-    return {
-      status: "error",
-      message: "خطایی رخ داده است، دوباره تلاش کنید.",
-    };
-  }
-
-  const data = await postFetch("/api/v1/verify", {
-    otp,
-    token: loginToken.value,
-  });
-  if (data.status === "success") {
-    (await cookies()).delete("login_token");
-    (await cookies()).set({
-      name: "access_token",
-      value: data.data.token,
-      httpOnly: true,
-      secure: true,
-      maxAge: 60 * 60 * 24 * 7, // One week
-      path: "/",
+  try {
+    const res = await fetch(`${process.env.API_URL}/verify`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ otp, token: loginToken.value }),
     });
 
-    return {
-      status: data.status,
-      message: data.message,
-      data: data.data.name,
-    };
-  } else {
-    return {
-      status: data.status,
-      message: data.message,
-    };
-  }
-}
-export async function sendUserName(stateName, formData) {
-  const name = formData.get("name");
-
-  if (name === "") {
-    return {
-      status: "error",
-      message: "لطفا یک  نام معتبر وارد نمایید.",
-    };
-  }
-  const accessToken = (await cookies()).get("access_token");
-  if (!accessToken) {
-    return {
-      status: "error",
-      message: "خطایی رخ داده است، دوباره تلاش کنید.",
-    };
-  }
-
-  const data = await postFetch(
-    "/api/v1/name",
-    { name },
-    {
-      Authorization: `Bearer ${accessToken.value}`,
+    if (!res.ok) {
+      return {
+        status: "error",
+        message: data,
+      };
     }
-  );
 
-  if (data.status === "success") {
+    const data = await res.json();
+
+    if (data.status !== "success") {
+      return {
+        status: "error",
+        message: data.message || "کد تایید اشتباه است",
+      };
+    }
+
+    //access_token
+    if (data.data?.token) {
+      cookieStore.set({
+        name: "access_token",
+        value: data.data.token,
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7, //1 week
+      });
+
+      // ✅ حذف توکن موقت OTP
+      cookieStore.delete("token");
+    }
+
     return {
-      status: data.status,
+      status: "success",
+      message: "ورود موفقیت‌آمیز بود",
       data: data.data,
-      message: data.message,
     };
-  } else {
+  } catch (error) {
+    console.log(error);
     return {
-      status: data.status,
-      message: data.message,
+      status: "error",
+      message: "خطا در بررسی کد تایید",
     };
   }
 }
+export async function sendUserName(prevState, formData) {
+  const name = formData.get("name");
+  const lastName = formData.get("last_name");
 
+  if (!name) {
+    return {
+      status: "error",
+      message: "لطفا نام را وارد نمایید",
+    };
+  }
+
+  if (!lastName) {
+    return {
+      status: "error",
+      message: "لطفا نام خانوادگی را وارد نمایید",
+    };
+  }
+
+  const cookieStore = cookies();
+  const accessToken = cookieStore.get("access_token");
+
+  if (!accessToken?.value) {
+    return {
+      status: "error",
+      message: "نشست شما منقضی شده است",
+    };
+  }
+
+  const res = await fetch(`${process.env.API_URL}/user/register`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken.value}`,
+    },
+    body: JSON.stringify({
+      name,
+      last_name: lastName,
+    }),
+  });
+
+  const data = await res.json();
+
+  if (!res.ok || data.status !== "success") {
+    return {
+      status: "error",
+      message: data?.message || "خطا در ثبت اطلاعات",
+    };
+  }
+
+  return {
+    status: "success",
+    message: data.message || "اطلاعات با موفقیت ثبت شد",
+  };
+}
 export async function logout() {
   const accessToken = (await cookies()).get("access_token");
 
@@ -152,7 +209,7 @@ export async function logout() {
   }
 
   const data = await postFetch(
-    "/api/v1/logout",
+    "/logout",
     {},
     {
       Authorization: `Bearer ${accessToken.value}`,
@@ -176,7 +233,9 @@ export async function logout() {
   }
 }
 export async function resendOtp(stateOtp, formData) {
-  const loginToken = (await cookies()).get("login_token");
+  const cookieStore = cookies();
+  const loginToken = cookieStore.get("token");
+
   if (!loginToken) {
     return {
       status: "error",
@@ -184,13 +243,13 @@ export async function resendOtp(stateOtp, formData) {
     };
   }
 
-  const data = await postFetch("/api/v1/resend", {
+  const data = await postFetch("/resend", {
     token: loginToken.value,
   });
   if (data.status === "success") {
     (await cookies()).delete("login_token");
     (await cookies()).set({
-      name: "login_token",
+      name: "token",
       value: data.data.token,
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7,

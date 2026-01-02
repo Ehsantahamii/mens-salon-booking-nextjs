@@ -2,14 +2,17 @@
 "use server";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
-const API_URL = "https://panel.developmart.ir";
+const API_URL = process.env.API_URL;
 
 const getFetch = async (url, headers = {}) => {
-  const res = await fetch(`${API_URL}${url}`, {
+  const res = await fetch(`${`https://panel.varna-web.ir/api/v1`}${url}`, {
     cache: "no-store",
+
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      "X-TENANT-SLUG": "khalili",
+
       ...headers,
     },
   });
@@ -29,11 +32,13 @@ const postFetch = async (url, body, headers = {}) => {
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
+      "X-TENANT-SLUG": "khalili",
+
       ...headers,
     },
     body: JSON.stringify(body),
   });
-  revalidatePath("/reservation");
+  // revalidatePath("/reservation");
   return await res.json();
 };
 const putFetch = async (url, body) => {

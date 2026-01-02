@@ -1,103 +1,243 @@
-"use client"
-import { checkOtp } from '@/actions/LoginActions';
-import { useEffect, useState, useRef, useContext } from 'react';
-import { useActionState } from "react";
-import { toast } from "react-toastify";
-import SubmitBtn from '@/components/module/SubmitBtn';
-import { FaArrowCircleLeft } from "react-icons/fa";
-import { useRouter } from 'next/navigation';
-import ResendOtpBtn from './ResendOtpBtn';
-import UserInfoContext from '@/context/UserInfoContext';
+"use client";
 
-const CheckOtpForm = ({ setStep }) => {
+import React, { useState, useRef, useEffect } from "react";
+import { ArrowRight, Shield, Loader2, X } from "lucide-react";
+import { useFormStatus } from "react-dom";
+import { checkOtpAction, loginAction } from "@/actions/LoginActions";
+import { useRouter } from "next/navigation";
+
+const initialState = {
+    status: "",
+    message: "",
+};
+
+function SubmitButton({ isValid }) {
+    const { pending } = useFormStatus();
+
+    return (
+        <button
+            type="submit"
+            disabled={!isValid || pending}
+            className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${isValid && !pending
+                    ? 'bg-[#ffd39a] text-[#3a3845] shadow-[0_8px_20px_rgba(255,211,154,0.4)] hover:shadow-[0_12px_30px_rgba(255,211,154,0.5)] hover:-translate-y-0.5 cursor-pointer'
+                    : 'bg-[#e5e7eb] text-[#9ca3af] cursor-not-allowed'
+                }`}
+        >
+            {pending ? (
+                <>
+                    <Loader2 size={20} className="animate-spin" />
+                    <span>در حال بررسی...</span>
+                </>
+            ) : (
+                <span>تأیید کد</span>
+            )}
+        </button>
+    );
+}
+
+export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
-    const [activeBtn, setActiveBtn] = useState(false);
-
+    const [isValid, setIsValid] = useState(false);
+    const [timer, setTimer] = useState(120);
+    const [canResend, setCanResend] = useState(false);
     const inputRefs = useRef([]);
-    const [stateOtp, formActionOtp] = useActionState(checkOtp, {});
 
-    const router = useRouter()
-    const { saveUserData } = useContext(UserInfoContext)
+    const router = useRouter();
 
+    const [state, formAction] = React.useActionState(
+        checkOtpAction,
+        initialState
+    );
+
+    // redirect on success
     useEffect(() => {
-
-        if (stateOtp?.status === "success" && stateOtp?.data !== 0) {
-            saveUserData(stateOtp?.data);
-            localStorage.setItem("user", JSON.stringify(stateOtp?.data));
-            toast.success(`سلام ${"" + stateOtp?.data + "-"}خوش آمدید.`)
-            router.push("/reservation");
-
-        } else if (stateOtp?.data == 0) {
-            setStep(3)
-        } else if (stateOtp?.status === "error") {
-            toast(stateOtp?.message, { type: `${stateOtp.status}` });
+        if (state.status === "success") {
+            if (state?.data?.profile_status_complete === false) {
+                setStep(3);
+            } else if (state?.data?.profile_status_complete === true) {
+                setTimeout(() => {
+                    router.push("/reservation");
+                }, 500);
+            } else {
+                setStep(1);
+            }
         }
+    }, [state.status]);
 
-    }, [stateOtp]);
-
+    // Countdown
+    useEffect(() => {
+        if (timer > 0) {
+            const i = setInterval(() => setTimer(t => t - 1), 1000);
+            return () => clearInterval(i);
+        } else {
+            setCanResend(true);
+        }
+    }, [timer]);
 
     const handleChange = (index, value) => {
-
         if (isNaN(value)) return;
         const newOtp = [...otp];
         newOtp[index] = value;
         setOtp(newOtp);
-
-        if (value && index < otp.length - 1) {
-            inputRefs.current[index + 1].focus();
-        }
-        if (index == 5) {
-            setActiveBtn(true)
-        } else if (index < 5) {
-            setActiveBtn(false)
-        }
-
+        setIsValid(newOtp.every(d => d));
+        if (value && index < 5) inputRefs.current[index + 1]?.focus();
     };
-    const handleKeyDown = (index, event) => {
-        if (event.key === "Backspace" && !otp[index] && index > 0) {
-            inputRefs.current[index - 1].focus();
+
+    // ✅ مدیریت کلیدهای Backspace و Delete
+    const handleKeyDown = (index, e) => {
+        if (e.key === "Backspace") {
+            e.preventDefault();
+            const newOtp = [...otp];
+
+            if (newOtp[index]) {
+                // اگر خانه فعلی پر است، آن را پاک کن
+                newOtp[index] = "";
+                setOtp(newOtp);
+                setIsValid(newOtp.every(d => d));
+            } else if (index > 0) {
+                // اگر خانه خالی است، به خانه قبلی برو و آن را پاک کن
+                newOtp[index - 1] = "";
+                setOtp(newOtp);
+                setIsValid(newOtp.every(d => d));
+                inputRefs.current[index - 1]?.focus();
+            }
+        } else if (e.key === "Delete") {
+            // پاک کردن خانه فعلی با Delete
+            e.preventDefault();
+            const newOtp = [...otp];
+            newOtp[index] = "";
+            setOtp(newOtp);
+            setIsValid(newOtp.every(d => d));
         }
+    };
+
+    // ✅ پاک کردن همه خانه‌ها
+    const handleClearAll = () => {
+        setOtp(["", "", "", "", "", ""]);
+        setIsValid(false);
+        inputRefs.current[0]?.focus();
+    };
+
+    const handleResend = async () => {
+        if (!canResend) return;
+        const fd = new FormData();
+        fd.append("mobile", mobile);
+        await loginAction({}, fd);
+        setTimer(120);
+        setCanResend(false);
+        setOtp(["", "", "", "", "", ""]);
+        inputRefs.current[0]?.focus();
+    };
+
+    // ✅ پیست کردن کد از کلیپ‌بورد
+    const handlePaste = (e) => {
+        e.preventDefault();
+        const pastedData = e.clipboardData.getData('text').replace(/\D/g, '').slice(0, 6);
+        const newOtp = [...otp];
+
+        for (let i = 0; i < pastedData.length; i++) {
+            newOtp[i] = pastedData[i];
+        }
+
+        setOtp(newOtp);
+        setIsValid(newOtp.every(d => d));
+
+        // فوکوس روی آخرین خانه پر شده
+        const lastFilledIndex = Math.min(pastedData.length, 5);
+        inputRefs.current[lastFilledIndex]?.focus();
     };
 
     return (
-        <section className="w-[100dvw] h-[90vh] md:h-[90dvh] flex justify-center items-center">
-            <div className="w-[90%] max-w-[420px] bg-white flex flex-col justify-center relative items-center min-h-[320px] shadow rounded-xl ">
-                <FaArrowCircleLeft color='#333' title='بازگشت' size={20} className='cursor-pointer absolute left-4 top-4' onClick={() => setStep(1)} />
-                <h2 className=''>
-                    کد تایید را وارد نمایید
-                </h2>
-                <h3 className=' text-[#333] font-thin py-4'>
-                    کد ارسال شده را وارد نمایید
-                </h3>
-                <form className="w-[90%] mx-auto gap-6 flex flex-col justify-center items-center" action={formActionOtp}>
-                    <div className="flex space-x-2 justify-center flex-row-reverse">
-                        {otp.map((digit, index) => (
-                            <input
-                                key={index}
-                                type="text"
-                                autoComplete="one-time-code"
-                                maxLength="1"
-                                inputMode="numeric"
-                                className="w-[2.3rem] h-[2.3rem] sm:w-12 sm:h-12 text-center text-xl border rounded-md"
-                                value={digit}
-                                onChange={(e) => handleChange(index, e.target.value)}
-                                onKeyDown={(e) => handleKeyDown(index, e)}
-                                ref={(el) => (inputRefs.current[index] = el)}
-                            />
-                        ))}
-                    </div>
-                    <input type="hidden" name="otp" id="otp" value={otp.join("")} autoComplete="one-time-code" />
-                    <SubmitBtn
-                        title="تأیید"
-                        style={`text-white px-6 py-2 rounded-md  ${activeBtn ? "bg-orange-400" : ""}`}
-                    />
+        <div dir="rtl" className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-[#3a3845] via-[#4a4855] to-[#3a3845]">
+            <div className="w-full max-w-md relative">
+                <div className="bg-white rounded-3xl p-8 shadow-2xl relative overflow-hidden">
+                    <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#ffd39a] to-[#ffcd7a]" />
 
-                </form>
-                <ResendOtpBtn />
+                    <button
+                        onClick={() => setStep(1)}
+                        type="button"
+                        className="absolute left-6 top-6 w-10 h-10 rounded-full rotate-180 bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                    >
+                        <ArrowRight size={20} />
+                    </button>
+
+                    <form action={formAction} className="space-y-6">
+                        <input type="hidden" name="otp" value={otp.join("")} />
+
+                        <div className="text-center mb-8 pt-6">
+                            <div className="w-16 h-16 bg-[#ffd39a]/20 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                                <Shield size={32} className="text-[#ffd39a]" />
+                            </div>
+                            <h2 className="text-2xl font-bold">کد تایید را وارد کنید</h2>
+                            <p className="text-gray-600">کد ارسال شده به {userPhone}</p>
+                        </div>
+
+                        {state.status === "error" && (
+                            <div className="bg-red-50 border-r-4 border-red-500 p-4 rounded-lg">
+                                <p className="text-red-700 text-sm">{state.message}</p>
+                            </div>
+                        )}
+
+                        {state.status === "success" && (
+                            <div className="bg-green-50 border-r-4 border-green-500 p-4 rounded-lg">
+                                <p className="text-green-700 text-sm">{state.message}</p>
+                            </div>
+                        )}
+
+                        <div className="space-y-4">
+                            <div className="flex flex-row-reverse justify-center gap-2">
+                                {otp.map((digit, i) => (
+                                    <input
+                                        key={i}
+                                        type="text"
+                                        inputMode="numeric"
+                                        maxLength={1}
+                                        ref={el => inputRefs.current[i] = el}
+                                        value={digit}
+                                        onChange={e => handleChange(i, e.target.value)}
+                                        onKeyDown={e => handleKeyDown(i, e)}
+                                        onPaste={i === 0 ? handlePaste : undefined}
+                                        className={`w-12 h-12 text-center text-xl border-2 rounded-xl transition-all focus:outline-none ${digit
+                                                ? 'border-[#ffd39a] bg-[#ffd39a]/5'
+                                                : 'border-gray-300 hover:border-gray-400'
+                                            } focus:border-[#ffd39a] focus:ring-2 focus:ring-[#ffd39a]/20`}
+                                    />
+                                ))}
+                            </div>
+
+                            {/* دکمه پاک کردن */}
+                            {otp.some(d => d) && (
+                                <div className="flex justify-center">
+                                    <button
+                                        type="button"
+                                        onClick={handleClearAll}
+                                        className="text-gray-500 hover:text-gray-700 text-sm flex items-center gap-1 transition-colors"
+                                    >
+                                        <X size={16} />
+                                        <span>پاک کردن همه</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+
+                        <SubmitButton isValid={isValid} />
+
+                        <div className="text-center pt-4">
+                            <button
+                                type="button"
+                                onClick={handleResend}
+                                disabled={!canResend}
+                                className={`font-semibold transition-colors ${canResend
+                                        ? 'text-amber-500 hover:text-amber-600 cursor-pointer'
+                                        : 'text-gray-400 cursor-not-allowed'
+                                    }`}
+                            >
+                                {canResend ? "ارسال مجدد کد" : `ارسال مجدد تا ${timer} ثانیه`}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-        </section>
-
-    )
-};
-
-export default CheckOtpForm;
+        </div>
+    );
+}
