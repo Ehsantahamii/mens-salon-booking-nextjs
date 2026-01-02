@@ -1,13 +1,17 @@
 "use client"
 
-import ReservedContext from "@/context/ReservedContext";
-import { useContext } from "react";
-import Lottie from 'react-lottie-player';
-import runFile from "../../lottie/Animation - 1741003650231.json";
 import Link from "next/link";
+import { useContext } from "react";
+import ReservedContext from "@/context/ReservedContext";
 import { BiCalendar, BiTime, BiUser, BiArrowBack } from "react-icons/bi";
 import { MdOutlineDesignServices } from "react-icons/md";
 import { IoCheckmarkCircleOutline } from "react-icons/io5";
+
+import runFile from "../../lottie/Animation - 1741003650231.json";
+const Lottie = dynamic(() => import("react-lottie-player"), {
+    ssr: false,
+});
+
 
 const ResultPage = () => {
     const { reservedData } = useContext(ReservedContext);
