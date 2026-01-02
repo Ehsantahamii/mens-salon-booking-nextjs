@@ -14,6 +14,7 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
     const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext);
+    console.log(doReserveData)
 
     // Handle body scroll lock and ESC key
     useEffect(() => {
@@ -104,7 +105,7 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
                         {/* Service */}
                         <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
                             <div className="p-2 bg-liteGold/10 rounded-lg">
-                                <MdOutlineDesignServices className="text-liteGold" size={22} />
+                                <MdOutlineDesignServices className="text-liteGold drop-shadow" size={22} />
                             </div>
                             <div className="flex-1">
                                 <p className="text-xs text-gray-500 mb-1">خدمت</p>
@@ -117,7 +118,7 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
                         {/* Provider */}
                         <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
                             <div className="p-2 bg-liteGold/10 rounded-lg">
-                                <BiUser className="text-liteGold" size={22} />
+                                <BiUser className="text-liteGold drop-shadow" size={22} />
                             </div>
                             <div className="flex-1">
                                 <p className="text-xs text-gray-500 mb-1">خدمات‌دهنده</p>
@@ -131,7 +132,7 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
                         {doReserveData.day && (
                             <div className="flex items-center gap-3 pb-3 border-b border-gray-200">
                                 <div className="p-2 bg-liteGold/10 rounded-lg">
-                                    <BiCalendar className="text-liteGold" size={22} />
+                                    <BiCalendar className="text-liteGold drop-shadow" size={22} />
                                 </div>
                                 <div className="flex-1">
                                     <p className="text-xs text-gray-500 mb-1">تاریخ</p>

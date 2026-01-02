@@ -1,16 +1,22 @@
-"use client"
-import Lottie from 'react-lottie-player';
+"use client";
+
+import dynamic from "next/dynamic";
+
+const Lottie = dynamic(() => import("react-lottie-player"), {
+    ssr: false,
+});
+
 import runFile from "../../lottie/404-animate.json";
 
-const NotFound = () => {
-
+export default function NotFound() {
     return (
-        <>
-
-            <Lottie animationData={runFile} play loop={true} className='w-[75vw] max-w-[540px]  mx-auto' />
-
-        </>
+        <div className="flex justify-center">
+            <Lottie
+                animationData={runFile}
+                play
+                loop
+                className="w-[75vw] max-w-[540px] mx-auto"
+            />
+        </div>
     );
-};
-
-export default NotFound;
+}

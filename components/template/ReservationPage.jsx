@@ -25,13 +25,12 @@ const ReservationPage = ({ salonData }) => {
     const [day, setDay] = useState(null);
     const [selectedDate, setSelectedDate] = useState(null);
     const [time, setTime] = useState(null);
-    const [selectedTime, setSelectedTime] = useState(null);
+    console.log(time)
     const [firstFreeDate, setFirstFreeDate] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [searchLoading, setSearchLoading] = useState(false);
     const [doReserveData, setDoReserveData] = useState(null);
     const [modal, setOpenModal] = useState(false);
-
     const handleServiceChange = async (event) => {
         const value = event.target.value;
         setServiceId(value);
