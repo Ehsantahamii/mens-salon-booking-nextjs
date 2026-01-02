@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useContext } from "react";
+import dynamic from "next/dynamic";
 import ReservedContext from "@/context/ReservedContext";
 import { BiCalendar, BiTime, BiUser, BiArrowBack } from "react-icons/bi";
 import { MdOutlineDesignServices } from "react-icons/md";
