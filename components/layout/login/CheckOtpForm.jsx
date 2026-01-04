@@ -19,8 +19,8 @@ function SubmitButton({ isValid }) {
             type="submit"
             disabled={!isValid || pending}
             className={`w-full py-4 rounded-xl font-semibold text-lg transition-all duration-300 flex items-center justify-center gap-2 ${isValid && !pending
-                    ? 'bg-[#ffd39a] text-[#3a3845] shadow-[0_8px_20px_rgba(255,211,154,0.4)] hover:shadow-[0_12px_30px_rgba(255,211,154,0.5)] hover:-translate-y-0.5 cursor-pointer'
-                    : 'bg-[#e5e7eb] text-[#9ca3af] cursor-not-allowed'
+                ? 'bg-[#ffd39a] text-[#3a3845] shadow-[0_8px_20px_rgba(255,211,154,0.4)] hover:shadow-[0_12px_30px_rgba(255,211,154,0.5)] hover:-translate-y-0.5 cursor-pointer'
+                : 'bg-[#e5e7eb] text-[#9ca3af] cursor-not-allowed'
                 }`}
         >
             {pending ? (
@@ -35,7 +35,7 @@ function SubmitButton({ isValid }) {
     );
 }
 
-export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
+export default function ModernOtpForm({ mobile, userPhone, setStep }) {
     const [otp, setOtp] = useState(["", "", "", "", "", ""]);
     const [isValid, setIsValid] = useState(false);
     const [timer, setTimer] = useState(120);
@@ -102,7 +102,6 @@ export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
                 inputRefs.current[index - 1]?.focus();
             }
         } else if (e.key === "Delete") {
-            // پاک کردن خانه فعلی با Delete
             e.preventDefault();
             const newOtp = [...otp];
             newOtp[index] = "";
@@ -170,6 +169,12 @@ export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
                             </div>
                             <h2 className="text-2xl font-bold">کد تایید را وارد کنید</h2>
                             <p className="text-gray-600">کد ارسال شده به {userPhone}</p>
+                            <p>
+                                {
+                                    state?.otp
+                                }
+
+                            </p>
                         </div>
 
                         {state.status === "error" && (
@@ -197,9 +202,9 @@ export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
                                         onChange={e => handleChange(i, e.target.value)}
                                         onKeyDown={e => handleKeyDown(i, e)}
                                         onPaste={i === 0 ? handlePaste : undefined}
-                                        className={`w-12 h-12 text-center text-xl border-2 rounded-xl transition-all focus:outline-none ${digit
-                                                ? 'border-[#ffd39a] bg-[#ffd39a]/5'
-                                                : 'border-gray-300 hover:border-gray-400'
+                                        className={`sm:w-12 w-8 h-8 sm:h-12 text-center text-base sm:text-xl border-2 rounded-xl transition-all focus:outline-none ${digit
+                                            ? 'border-[#ffd39a] bg-[#ffd39a]/5'
+                                            : 'border-gray-300 hover:border-gray-400'
                                             } focus:border-[#ffd39a] focus:ring-2 focus:ring-[#ffd39a]/20`}
                                     />
                                 ))}
@@ -228,8 +233,8 @@ export default function ModernOtpForm({ mobile, onBack, userPhone, setStep }) {
                                 onClick={handleResend}
                                 disabled={!canResend}
                                 className={`font-semibold transition-colors ${canResend
-                                        ? 'text-amber-500 hover:text-amber-600 cursor-pointer'
-                                        : 'text-gray-400 cursor-not-allowed'
+                                    ? 'text-amber-500 hover:text-amber-600 cursor-pointer'
+                                    : 'text-gray-400 cursor-not-allowed'
                                     }`}
                             >
                                 {canResend ? "ارسال مجدد کد" : `ارسال مجدد تا ${timer} ثانیه`}

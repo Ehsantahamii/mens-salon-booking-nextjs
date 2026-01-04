@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 const API_URL = process.env.API_URL;
 
 const getFetch = async (url, headers = {}) => {
-  const res = await fetch(`${`https://panel.varna-web.ir/api/v1`}${url}`, {
+  const res = await fetch(`${API_URL}${url}`, {
     cache: "no-store",
 
     headers: {
@@ -41,34 +41,34 @@ const postFetch = async (url, body, headers = {}) => {
   // revalidatePath("/reservation");
   return await res.json();
 };
-const putFetch = async (url, body) => {
-  const token = (await cookies()).get("login_token");
-  const res = await fetch(`${API_URL}${url}`, {
-    cache: "no-store",
-    method: "PUT",
-    headers: {
-      "Content-Type": "multipart/form-data",
-      Accept: "application/json",
-      Authorization: `Bearer ${token.value}`,
-    },
-    body: JSON.stringify(body),
-  });
+// const putFetch = async (url, body) => {
+//   const token = (await cookies()).get("login_token");
+//   const res = await fetch(`${API_URL}${url}`, {
+//     cache: "no-store",
+//     method: "PUT",
+//     headers: {
+//       "Content-Type": "multipart/form-data",
+//       Accept: "application/json",
+//       Authorization: `Bearer ${token.value}`,
+//     },
+//     body: JSON.stringify(body),
+//   });
 
-  return await res.json();
-};
-const deleteFetch = async (url) => {
-  const token = (await cookies()).get("login_token");
-  const res = await fetch(`${API_URL}${url}`, {
-    cache: "no-store",
-    method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      Authorization: `Bearer ${token.value}`,
-    },
-  });
+//   return await res.json();
+// };
+// const deleteFetch = async (url) => {
+//   const token = (await cookies()).get("login_token");
+//   const res = await fetch(`${API_URL}${url}`, {
+//     cache: "no-store",
+//     method: "DELETE",
+//     headers: {
+//       "Content-Type": "application/json",
+//       Accept: "application/json",
+//       Authorization: `Bearer ${token.value}`,
+//     },
+//   });
 
-  return await res.json();
-};
+//   return await res.json();
+// };
 
-export { getFetch, postFetch, putFetch, deleteFetch };
+export { getFetch, postFetch };

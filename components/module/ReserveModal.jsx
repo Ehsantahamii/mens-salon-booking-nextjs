@@ -14,7 +14,6 @@ const SetReserveModal = ({ setOpenModal, doReserveData }) => {
     const [stateSendTime, formActionSendTime] = useActionState(sendReserveTime, {});
     const router = useRouter();
     const { saveReservedData } = useContext(ReservedContext);
-    console.log(doReserveData)
 
     // Handle body scroll lock and ESC key
     useEffect(() => {

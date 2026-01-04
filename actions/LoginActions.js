@@ -61,7 +61,6 @@ export async function loginAction(prevState, formData) {
     return {
       status: "success",
       message: data.message || "کد تایید با موفقیت ارسال شد",
-      otp: data?.data?.otp,
     };
   } catch {
     return {
@@ -138,7 +137,6 @@ export async function checkOtpAction(prevState, formData) {
       data: data.data,
     };
   } catch (error) {
-    console.log(error);
     return {
       status: "error",
       message: "خطا در بررسی کد تایید",
@@ -197,6 +195,7 @@ export async function sendUserName(prevState, formData) {
   return {
     status: "success",
     message: data.message || "اطلاعات با موفقیت ثبت شد",
+    data:data?.data?.name
   };
 }
 export async function logout() {

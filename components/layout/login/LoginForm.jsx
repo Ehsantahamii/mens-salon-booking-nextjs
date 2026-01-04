@@ -5,6 +5,8 @@ import { Phone, ArrowLeft, Sparkles, Loader2, CircleCheckBig } from "lucide-reac
 import { useFormStatus } from "react-dom";
 import { loginAction } from "@/actions/LoginActions";
 import Link from "next/link";
+import { toast } from "react-toastify";
+import { useSearchParams } from "next/navigation";
 
 const initialState = {
     status: "",
@@ -43,16 +45,20 @@ export default function ModernLoginForm({ setStep, setUserPhone }) {
     const [mobile, setMobile] = useState("");
     const [isValid, setIsValid] = useState(false);
 
-    /**
-     * ✅ React 19+
-     * useActionState replaces useFormState
-     */
+    const searchParams = useSearchParams();
+    const reason = searchParams.get("redirect");
+
+
     const [state, formAction] = React.useActionState(
         loginAction,
         initialState
     );
-    console.log(state)
 
+    useEffect(() => {
+        if (reason === "no-login") {
+            toast.info(" ابتدا وارد حساب کاربری خود شوید");
+        }
+    }, [reason]);
 
     useEffect(() => {
         if (state.status === "success") {
@@ -63,14 +69,14 @@ export default function ModernLoginForm({ setStep, setUserPhone }) {
 
     const handleMobileChange = (e) => {
         const value = e.target.value.replace(/\D/g, "");
-        setMobile(value);
         setIsValid(value.length === 11);
+        setMobile(value);
     };
 
     return (
         <div
             dir="rtl"
-            className="min-h-screen flex items-center justify-center px-4 bg-gradient-to-br from-[#3a3845] via-[#4a4855] to-[#3a3845]"
+            className="min-h-screen flex items-center justify-center px-4 py-8 bg-gradient-to-br from-[#3a3845] via-[#4a4855] to-[#3a3845]"
         >
             <div className="w-full max-w-md relative">
 

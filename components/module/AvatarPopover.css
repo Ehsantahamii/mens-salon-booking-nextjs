@@ -1,4 +1,4 @@
-.user-btn span::after {
+/* .user-btn span::after {
   content: "";
   border-bottom: solid 1px #333;
   bottom: 0;
@@ -11,4 +11,4 @@
 }
 .user-btn span:hover:after {
   transform: scaleX(1);
-}
+} */

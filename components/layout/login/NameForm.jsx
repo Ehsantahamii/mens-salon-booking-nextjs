@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { User, AlertCircle, Loader2 } from "lucide-react";
 import { useFormStatus } from "react-dom";
 import { sendUserName } from "@/actions/LoginActions";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import UserInfoContext from "@/context/UserInfoContext";
 
 const initialState = {
     status: "",
@@ -42,12 +43,13 @@ export default function ModernNameForm() {
     const [isValid, setIsValid] = useState(false);
 
     const router = useRouter()
+    const { saveUserData } = useContext(UserInfoContext); // اضافه کنید
+
 
     const [state, formAction] = React.useActionState(
         sendUserName,
         initialState
     );
-    console.log(state)
 
     useEffect(() => {
         setIsValid(name.trim().length > 0 && lastName.trim().length > 0);
@@ -55,11 +57,13 @@ export default function ModernNameForm() {
 
     useEffect(() => {
         if (state.status === "success") {
-            router.push("/reservation")
-            toast.success("خوش آمدید")
-        }
-    }, [state]);
 
+            localStorage.setItem("user", JSON.stringify(state?.data));
+            saveUserData(state?.data);
+            router.push("/reservation");
+            toast.success(` خوش آمدید${state?.data}`);
+        }
+    }, [state, router]);
     return (
         <div
             dir="rtl"

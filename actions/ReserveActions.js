@@ -68,7 +68,6 @@ export async function getReserveTimes(stateCellphone, formData) {
 }
 export async function sendReserveTime(prevState, formData) {
   const id = formData.get("time_id");
-  console.log("iddd", id);
 
   if (!id || id === "") {
     return {

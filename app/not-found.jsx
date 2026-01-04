@@ -1,15 +1,7 @@
-import NotFound from "@/components/layout/NotFound"
-import Link from "next/link"
+// app/not-found.js
 
-function NotFoundPage() {
-    return <section className="flex flex-col justify-center items-center">
-        <NotFound />
-        <h1>
-            شما گم شده اید!
-        </h1>
-        <Link className="px-4 py-2 rounded-lg bg-liteGold text-xl" href="/reservation">بازگشت </Link>
+import NotFoundPage from "@/components/layout/NotFound";
 
-    </section>
+export default function NotFound() {
+    return <NotFoundPage />
 }
-
-export default NotFoundPage
