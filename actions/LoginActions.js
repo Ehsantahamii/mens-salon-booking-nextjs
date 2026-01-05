@@ -195,42 +195,52 @@ export async function sendUserName(prevState, formData) {
   return {
     status: "success",
     message: data.message || "اطلاعات با موفقیت ثبت شد",
-    data:data?.data?.name
+    data: data?.data?.name,
   };
 }
 export async function logout() {
-  const accessToken = (await cookies()).get("access_token");
+  try {
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access_token");
 
-  if (!accessToken) {
-    return {
-      error: "توکن یافت نشد!",
-    };
-  }
-
-  const data = await postFetch(
-    "/logout",
-    {},
-    {
-      Authorization: `Bearer ${accessToken.value}`,
+    if (!accessToken) {
+      return {
+        status: "error",
+        message: "توکن یافت نشد!",
+      };
     }
-  );
-  // if (data.status === "success") {
-  //   redirect("/");
-  // }
 
-  if (data.status === "success") {
-    (await cookies()).delete("access_token");
-    return {
-      status: data.status,
-      message: data.message,
-    };
-  } else {
+    // ارسال درخواست logout به سرور
+    const data = await postFetch(
+      "/logout",
+      {},
+      {
+        Authorization: `Bearer ${accessToken.value}`,
+      }
+    );
+
+    // در صورت موفقیت، حذف کوکی
+    if (data.status === "success") {
+      cookieStore.delete("access_token");
+      return {
+        status: "success",
+        message: data.message || "با موفقیت خارج شدید",
+      };
+    } else {
+      return {
+        status: "error",
+        message: data.message || "خروج با مشکل روبرو شد!",
+      };
+    }
+  } catch (error) {
+    console.error("[Logout Error]:", error);
     return {
       status: "error",
-      error: "خروج با مشکل روبرو شد!",
+      message: "خطا در ارتباط با سرور",
     };
   }
 }
+
 export async function resendOtp(stateOtp, formData) {
   const cookieStore = cookies();
   const loginToken = cookieStore.get("token");
@@ -246,12 +256,12 @@ export async function resendOtp(stateOtp, formData) {
     token: loginToken.value,
   });
   if (data.status === "success") {
-    (await cookies()).delete("login_token");
+    (await cookies()).delete("token");
     (await cookies()).set({
       name: "token",
       value: data.data.token,
       httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7,
+      maxAge: 60 * 60 * 24,
       path: "/",
     });
 

@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ArrowRight, Shield, Loader2, X } from "lucide-react";
 import { useFormStatus } from "react-dom";
-import { checkOtpAction, loginAction } from "@/actions/LoginActions";
+import { checkOtpAction, loginAction, resendOtp } from "@/actions/LoginActions";
 import { useRouter } from "next/navigation";
 
 const initialState = {
@@ -121,7 +121,7 @@ export default function ModernOtpForm({ mobile, userPhone, setStep }) {
         if (!canResend) return;
         const fd = new FormData();
         fd.append("mobile", mobile);
-        await loginAction({}, fd);
+        await resendOtp({}, fd);
         setTimer(120);
         setCanResend(false);
         setOtp(["", "", "", "", "", ""]);
